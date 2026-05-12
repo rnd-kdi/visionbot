@@ -1,11 +1,11 @@
 {
-    "name": "KBOT by KDI EDU",
-    "description": "Thư viện để làm ứng dụng KBOT với HUSKYLENS và ORC CONTROL HUB",
+    "name": "VISIONBOT by KDI EDU",
+    "description": "Thư viện để làm ứng dụng VISIONBOT với HUSKYLENS và ORC CONTROL HUB",
     "libs": [
         "constants.py",
         "angle_sensor.py",
         "gamepad.py",
-        "kbot.py",
+        "visionbot.py",
         "line_sensor.py",
         "mdv1.py",
         "mdv2.py",

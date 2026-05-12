@@ -1078,7 +1078,7 @@ Blockly.Python["robotics_angle_sensor_init"] = function (block) {
 
   var code = 'angle_sensor.calibrate(' + samples + ')\n' + 
     'create_task(angle_sensor.run())\n' +
-    'kbot.set_angle_sensor(angle_sensor)\n';
+    'visionbot.set_angle_sensor(angle_sensor)\n';
     
   return code;
 };
@@ -1311,7 +1311,7 @@ Blockly.Python["robotics_get_battery"] = function (block) {
 // HuskyLens blocks ---------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------
 
-const HuskyLensColorBlock = "#8B4513";
+const HuskyLensColorBlock = "#3d2403";
 
 var digitalPins = [
   ["D3", "D3"], ["D4", "D4"], ["D5", "D5"], ["D6", "D6"],
@@ -1337,8 +1337,8 @@ Blockly.Blocks['huskylens_i2c_init'] = {
 
 Blockly.Python['huskylens_i2c_init'] = function (block) {
   Blockly.Python.definitions_['import_huskylens'] = 'from HuskyLens import HuskyLens';
-  Blockly.Python.definitions_['import_setting_i2c'] = 'from setting import SDA_PIN, SCL_PIN';
-  Blockly.Python.definitions_['create_huskylens'] = 'husky = HuskyLens(sda_pin=SDA_PIN, scl_pin=SCL_PIN)';
+  Blockly.Python.definitions_['import_setting_pins'] = 'from setting import SDA_PIN, SCL_PIN';
+  Blockly.Python.definitions_['init_huskylens'] = 'husky = HuskyLens(sda_pin=SDA_PIN, scl_pin=SCL_PIN)';
   return '';
 };
 
@@ -1536,152 +1536,23 @@ Blockly.Python['huskylens_classification_is_id'] = function (block) {
   return [code, Blockly.Python.ORDER_COMPARISON];
 };
 
-// KBOT Robot blocks ---------------------------------------------------------------------------------------
+// VisionBot Robot blocks ---------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------
 
-const KBotColorBlock = "#ff7513";
-const KBotPIDColor = "#00a86b";
-const KBotTrackColor = "#9b59b6";
-const KBotGyroColor = "#2980b9";
-const KBotTestColor = "#7f8c8d";
-const KBotGamepadColor = "#e74c3c";
-const KBotLineColor = "#34ccf1";
+const VisionBotColorBlock = "#ff7513";
+const VisionBotPIDColor = "#00a86b";
+const VisionBotTrackColor = "#6b3a08";
+const VisionBotGyroColor = "#066e31";
+const VisionBotTestColor = "#ff7513";
+const VisionBotGamepadColor = "#e74c3c";
+const VisionBotLineColorA = "#c50bb6";
+const VisionBotLineColorB = "#800375";
 
-// Block 1: kbot_motor_init
-Blockly.Blocks['kbot_motor_init'] = {
+// Block: visionbot_motor_init_full (gộp khởi tạo động cơ + cài đặt encoder)
+Blockly.Blocks['visionbot_motor_init_full'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_motor_init",
-      message0: "Khởi tạo động cơ Encoder %1 bánh %2 đảo chiều %3",
-      previousStatement: null,
-      nextStatement: null,
-      args0: [
-        {
-          type: "field_dropdown",
-          name: "encoder",
-          options: [
-            ["E1", "E1"],
-            ["E2", "E2"]
-          ]
-        },
-        {
-          type: "field_dropdown",
-          name: "side",
-          options: [
-            ["TRÁI", "left"],
-            ["PHẢI", "right"]
-          ]
-        },
-        {
-          type: "field_dropdown",
-          name: "reverse",
-          options: [
-            ["KHÔNG", "no"],
-            ["CÓ", "yes"]
-          ]
-        }
-      ],
-      inputsInline: true,
-      colour: KBotColorBlock,
-      tooltip: "Khởi tạo động cơ encoder cho KBOT",
-      helpUrl: ""
-    });
-  }
-};
-
-Blockly.Python['kbot_motor_init'] = function (block) {
-  var encoder = block.getFieldValue('encoder');
-  var side = block.getFieldValue('side');
-  var reverse = block.getFieldValue('reverse');
-
-  Blockly.Python.definitions_['import_kbot'] = 'from kbot import *';
-  Blockly.Python.definitions_['import_robotics_motor'] = 'from motor import *';
-  Blockly.Python.definitions_['import_robotics_mdv2'] = 'from mdv2 import *';
-  Blockly.Python.definitions_['init_motor_driver_v2'] = 'md_v2 = MotorDriverV2()';
-
-  // Default: left=reversed=True, right=reversed=False
-  // "đảo chiều = CÓ" flips the default
-  var defaultReversed = (side == 'left');
-  var finalReversed = (reverse == 'yes') ? !defaultReversed : defaultReversed;
-  var reversedStr = finalReversed ? 'True' : 'False';
-
-  var code = '';
-  if (side == 'left') {
-    Blockly.Python.definitions_['init_kbot_left'] = 'kbot_left = DCMotor(md_v2, ' + encoder + ', reversed=' + reversedStr + ')';
-    if (reverse == 'yes') {
-      code += 'kbot_left.reverse_encoder()\n';
-    }
-  } else {
-    Blockly.Python.definitions_['init_kbot_right'] = 'kbot_right = DCMotor(md_v2, ' + encoder + ', reversed=' + reversedStr + ')';
-    if (reverse == 'yes') {
-      code += 'kbot_right.reverse_encoder()\n';
-    }
-  }
-
-  delete Blockly.Python.definitions_['init_kbot_robot'];
-  Blockly.Python.definitions_['init_kbot_robot'] = 'kbot = KBot(kbot_left, kbot_right)';
-  delete Blockly.Python.definitions_['deinit_kbot'];
-  Blockly.Python.definitions_['deinit_kbot'] = 'kbot.stop()';
-
-  return code;
-};
-
-// Block 2: kbot_set_encoder
-Blockly.Blocks['kbot_set_encoder'] = {
-  init: function () {
-    this.jsonInit({
-      type: "kbot_set_encoder",
-      message0: "KBOT cài đặt encoder bánh %1 RPM %2 PPR %3 tỉ số %4",
-      previousStatement: null,
-      nextStatement: null,
-      args0: [
-        {
-          type: "field_dropdown",
-          name: "side",
-          options: [
-            ["TRÁI", "left"],
-            ["PHẢI", "right"]
-          ]
-        },
-        {
-          type: "input_value",
-          name: "rpm",
-          check: "Number"
-        },
-        {
-          type: "input_value",
-          name: "ppr",
-          check: "Number"
-        },
-        {
-          type: "input_value",
-          name: "gears",
-          check: "Number"
-        }
-      ],
-      inputsInline: true,
-      colour: KBotColorBlock,
-      tooltip: "Cài đặt thông số encoder cho động cơ KBOT (cần thiết để dùng đơn vị cm)",
-      helpUrl: ""
-    });
-  }
-};
-
-Blockly.Python['kbot_set_encoder'] = function (block) {
-  var side = block.getFieldValue('side');
-  var rpm = Blockly.Python.valueToCode(block, 'rpm', Blockly.Python.ORDER_ATOMIC);
-  var ppr = Blockly.Python.valueToCode(block, 'ppr', Blockly.Python.ORDER_ATOMIC);
-  var gears = Blockly.Python.valueToCode(block, 'gears', Blockly.Python.ORDER_ATOMIC);
-  var motor = (side == 'left') ? 'kbot_left' : 'kbot_right';
-  var code = motor + ".set_encoder(rpm=" + rpm + ", ppr=" + ppr + ", gears=" + gears + ")\n";
-  return code;
-};
-
-// Block: kbot_motor_init_full (gộp khởi tạo động cơ + cài đặt encoder)
-Blockly.Blocks['kbot_motor_init_full'] = {
-  init: function () {
-    this.jsonInit({
-      type: "kbot_motor_init_full",
+      type: "visionbot_motor_init_full",
       message0: "Khởi tạo động cơ encoder %1 bánh %2 đảo chiều %3 RPM %4 PPR %5 tỉ số truyền %6",
       previousStatement: null,
       nextStatement: null,
@@ -1715,14 +1586,14 @@ Blockly.Blocks['kbot_motor_init_full'] = {
         { type: "input_value", name: "gears", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotPIDColor,
+      colour: VisionBotPIDColor,
       tooltip: "Khởi tạo động cơ encoder và cài đặt thông số trong 1 bước",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_motor_init_full'] = function (block) {
+Blockly.Python['visionbot_motor_init_full'] = function (block) {
   var encoder = block.getFieldValue('encoder');
   var side = block.getFieldValue('side');
   var reverse = block.getFieldValue('reverse');
@@ -1730,7 +1601,7 @@ Blockly.Python['kbot_motor_init_full'] = function (block) {
   var ppr = Blockly.Python.valueToCode(block, 'ppr', Blockly.Python.ORDER_ATOMIC);
   var gears = Blockly.Python.valueToCode(block, 'gears', Blockly.Python.ORDER_ATOMIC);
 
-  Blockly.Python.definitions_['import_kbot'] = 'from kbot import *';
+  Blockly.Python.definitions_['import_visionbot'] = 'from visionbot import *';
   Blockly.Python.definitions_['import_robotics_motor'] = 'from motor import *';
   Blockly.Python.definitions_['import_robotics_mdv2'] = 'from mdv2 import *';
   Blockly.Python.definitions_['init_motor_driver_v2'] = 'md_v2 = MotorDriverV2()';
@@ -1739,32 +1610,35 @@ Blockly.Python['kbot_motor_init_full'] = function (block) {
   // Không cần gọi reverse_encoder() driver-level nữa.
   var reversedStr = (reverse == 'yes') ? 'True' : 'False';
 
-  var motor;
+  // Gộp DCMotor init + set_encoder vào cùng 1 definition để cả hai cùng được hoist
+  // lên top-level. Cách này đảm bảo set_encoder vẫn được sinh ra dù block được đặt
+  // trong "khi Yolo UNO khởi động" (event này chỉ lấy definitions, bỏ qua body).
   if (side == 'left') {
-    motor = 'kbot_left';
-    Blockly.Python.definitions_['init_kbot_left'] = 'kbot_left = DCMotor(md_v2, ' + encoder + ', reversed=' + reversedStr + ')';
+    Blockly.Python.definitions_['init_visionbot_left'] =
+      'visionbot_left = DCMotor(md_v2, ' + encoder + ', reversed=' + reversedStr + ')\n' +
+      'visionbot_left.set_encoder(rpm=' + rpm + ', ppr=' + ppr + ', gears=' + gears + ')';
   } else {
-    motor = 'kbot_right';
-    Blockly.Python.definitions_['init_kbot_right'] = 'kbot_right = DCMotor(md_v2, ' + encoder + ', reversed=' + reversedStr + ')';
+    Blockly.Python.definitions_['init_visionbot_right'] =
+      'visionbot_right = DCMotor(md_v2, ' + encoder + ', reversed=' + reversedStr + ')\n' +
+      'visionbot_right.set_encoder(rpm=' + rpm + ', ppr=' + ppr + ', gears=' + gears + ')';
   }
 
-  // Force `kbot = KBot(...)` to appear AFTER both kbot_left and kbot_right.
+  // Force `visionbot = VisionBot(...)` to appear AFTER both visionbot_left and visionbot_right.
   // Re-inserting requires delete first because Blockly.Python.definitions_ preserves first-insert order.
-  delete Blockly.Python.definitions_['init_kbot_robot'];
-  delete Blockly.Python.definitions_['deinit_kbot'];
-  Blockly.Python.definitions_['init_kbot_robot'] = 'kbot = KBot(kbot_left, kbot_right)';
-  Blockly.Python.definitions_['deinit_kbot'] = 'kbot.stop()';
+  delete Blockly.Python.definitions_['init_visionbot_robot'];
+  delete Blockly.Python.definitions_['deinit_visionbot'];
+  Blockly.Python.definitions_['init_visionbot_robot'] = 'visionbot = VisionBot(visionbot_left, visionbot_right)';
+  Blockly.Python.definitions_['deinit_visionbot'] = 'visionbot.stop()';
 
-  var code = motor + '.set_encoder(rpm=' + rpm + ', ppr=' + ppr + ', gears=' + gears + ')\n';
-  return code;
+  return '';
 };
 
-// Block 3: kbot_set_speed
-Blockly.Blocks['kbot_set_speed'] = {
+// Block 3: visionbot_set_speed
+Blockly.Blocks['visionbot_set_speed'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_set_speed",
-      message0: "KBOT đặt tốc độ %1",
+      type: "visionbot_set_speed",
+      message0: "VisionBot đặt tốc độ %1",
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1775,25 +1649,25 @@ Blockly.Blocks['kbot_set_speed'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotColorBlock,
-      tooltip: "Đặt tốc độ mặc định cho KBOT",
+      colour: VisionBotColorBlock,
+      tooltip: "Đặt tốc độ mặc định cho VisionBot",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_set_speed'] = function (block) {
+Blockly.Python['visionbot_set_speed'] = function (block) {
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot.speed(" + speed + ")\n";
+  var code = "visionbot.speed(" + speed + ")\n";
   return code;
 };
 
-// Block 4: kbot_move
-Blockly.Blocks['kbot_move'] = {
+// Block 4: visionbot_move
+Blockly.Blocks['visionbot_move'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_move",
-      message0: "KBOT %1 tốc độ %2",
+      type: "visionbot_move",
+      message0: "VisionBot %1 tốc độ %2",
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1814,26 +1688,26 @@ Blockly.Blocks['kbot_move'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotColorBlock,
-      tooltip: "KBOT di chuyển liên tục",
+      colour: VisionBotColorBlock,
+      tooltip: "VisionBot di chuyển liên tục",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_move'] = function (block) {
+Blockly.Python['visionbot_move'] = function (block) {
   var dir = block.getFieldValue('direction');
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot." + dir + "(" + speed + ")\n";
+  var code = "visionbot." + dir + "(" + speed + ")\n";
   return code;
 };
 
-// Block 5: kbot_move_for
-Blockly.Blocks['kbot_move_for'] = {
+// Block 5: visionbot_move_for
+Blockly.Blocks['visionbot_move_for'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_move_for",
-      message0: "KBOT %1 tốc độ %2 trong %3 %4 rồi %5",
+      type: "visionbot_move_for",
+      message0: "VisionBot %1 tốc độ %2 trong %3 %4 rồi %5",
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1875,29 +1749,29 @@ Blockly.Blocks['kbot_move_for'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotColorBlock,
-      tooltip: "KBOT di chuyển trong khoảng thời gian hoặc quãng đường rồi dừng",
+      colour: VisionBotColorBlock,
+      tooltip: "VisionBot di chuyển trong khoảng thời gian hoặc quãng đường rồi dừng",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_move_for'] = function (block) {
+Blockly.Python['visionbot_move_for'] = function (block) {
   var dir = block.getFieldValue('direction');
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
   var amount = Blockly.Python.valueToCode(block, 'amount', Blockly.Python.ORDER_ATOMIC);
   var unit = block.getFieldValue('unit');
   var then = block.getFieldValue('then');
-  var code = "await kbot." + dir + "_for(" + speed + ", " + amount + ", unit=" + unit + ", then=" + then + ")\n";
+  var code = "await visionbot." + dir + "_for(" + speed + ", " + amount + ", unit=" + unit + ", then=" + then + ")\n";
   return code;
 };
 
-// Block 6: kbot_stop
-Blockly.Blocks['kbot_stop'] = {
+// Block 6: visionbot_stop
+Blockly.Blocks['visionbot_stop'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_stop",
-      message0: "KBOT %1",
+      type: "visionbot_stop",
+      message0: "VisionBot %1",
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1911,24 +1785,24 @@ Blockly.Blocks['kbot_stop'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotColorBlock,
-      tooltip: "Dừng KBOT",
+      colour: VisionBotColorBlock,
+      tooltip: "Dừng VisionBot",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_stop'] = function (block) {
+Blockly.Python['visionbot_stop'] = function (block) {
   var action = block.getFieldValue('action');
-  var code = "kbot." + action + "()\n";
+  var code = "visionbot." + action + "()\n";
   return code;
 };
 
-// Block 7: kbot_gyro_init
-Blockly.Blocks['kbot_gyro_init'] = {
+// Block 7: visionbot_gyro_init
+Blockly.Blocks['visionbot_gyro_init'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_gyro_init",
+      type: "visionbot_gyro_init",
       message0: "Khởi tạo cảm biến góc, calib %1 mẫu",
       previousStatement: null,
       nextStatement: null,
@@ -1940,14 +1814,14 @@ Blockly.Blocks['kbot_gyro_init'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotGyroColor,
-      tooltip: "Khởi tạo cảm biến góc MPU6050 cho KBOT (robot phải đứng yên khi calib)",
+      colour: VisionBotGyroColor,
+      tooltip: "Khởi tạo cảm biến góc MPU6050 cho VisionBot (robot phải đứng yên khi calib)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_gyro_init'] = function (block) {
+Blockly.Python['visionbot_gyro_init'] = function (block) {
   var samples = Blockly.Python.valueToCode(block, 'samples', Blockly.Python.ORDER_ATOMIC);
   Blockly.Python.definitions_['import_robotics_mpu6050'] = 'from mpu6050 import MPU6050';
   Blockly.Python.definitions_['init_robotics_mpu6050'] = 'imu = MPU6050()';
@@ -1955,15 +1829,15 @@ Blockly.Python['kbot_gyro_init'] = function (block) {
   Blockly.Python.definitions_['init_robotics_angle_sensor'] = 'angle_sensor = AngleSensor(imu)';
   var code = 'angle_sensor.calibrate(' + samples + ')\n' +
     'create_task(angle_sensor.run())\n' +
-    'kbot.set_angle_sensor(angle_sensor)\n';
+    'visionbot.set_angle_sensor(angle_sensor)\n';
   return code;
 };
 
-// Block 8: kbot_turn_degree
-Blockly.Blocks['kbot_turn_degree'] = {
+// Block 8: visionbot_turn_degree
+Blockly.Blocks['visionbot_turn_degree'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_turn_degree",
+      type: "visionbot_turn_degree",
       message0: "%1 tốc độ %2 RPM góc %3 độ rồi dừng",
       previousStatement: null,
       nextStatement: null,
@@ -1988,27 +1862,27 @@ Blockly.Blocks['kbot_turn_degree'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotGyroColor,
-      tooltip: "KBOT xoay theo góc với tốc độ RPM (cần khởi tạo cảm biến góc trước)",
+      colour: VisionBotGyroColor,
+      tooltip: "VisionBot xoay theo góc với tốc độ RPM (cần khởi tạo cảm biến góc trước)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_turn_degree'] = function (block) {
+Blockly.Python['visionbot_turn_degree'] = function (block) {
   var dir = block.getFieldValue('direction');
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
   var degree = Blockly.Python.valueToCode(block, 'degree', Blockly.Python.ORDER_ATOMIC);
-  var code = "await kbot." + dir + "_degree(" + speed + ", " + degree + ")\n";
+  var code = "await visionbot." + dir + "_degree(" + speed + ", " + degree + ")\n";
   return code;
 };
 
-// Block 9: kbot_run_speed
-Blockly.Blocks['kbot_run_speed'] = {
+// Block 9: visionbot_run_speed
+Blockly.Blocks['visionbot_run_speed'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_run_speed",
-      message0: "KBOT bánh TRÁI tốc độ %1 bánh PHẢI tốc độ %2",
+      type: "visionbot_run_speed",
+      message0: "VisionBot bánh TRÁI tốc độ %1 bánh PHẢI tốc độ %2",
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2024,25 +1898,25 @@ Blockly.Blocks['kbot_run_speed'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotColorBlock,
+      colour: VisionBotColorBlock,
       tooltip: "Điều khiển tốc độ từng bánh riêng biệt",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_run_speed'] = function (block) {
+Blockly.Python['visionbot_run_speed'] = function (block) {
   var left_speed = Blockly.Python.valueToCode(block, 'left_speed', Blockly.Python.ORDER_ATOMIC);
   var right_speed = Blockly.Python.valueToCode(block, 'right_speed', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot.run_speed(" + left_speed + ", " + right_speed + ")\n";
+  var code = "visionbot.run_speed(" + left_speed + ", " + right_speed + ")\n";
   return code;
 };
 
-// Block: kbot_set_target_rpm
-Blockly.Blocks['kbot_set_target_rpm'] = {
+// Block: visionbot_set_target_rpm
+Blockly.Blocks['visionbot_set_target_rpm'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_set_target_rpm",
+      type: "visionbot_set_target_rpm",
       message0: "Quay bánh trái %1 phải %2 RPM",
       previousStatement: null,
       nextStatement: null,
@@ -2059,25 +1933,25 @@ Blockly.Blocks['kbot_set_target_rpm'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotPIDColor,
+      colour: VisionBotPIDColor,
       tooltip: "Đặt tốc độ mong muốn (RPM) cho từng bánh",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_set_target_rpm'] = function (block) {
+Blockly.Python['visionbot_set_target_rpm'] = function (block) {
   var left_rpm = Blockly.Python.valueToCode(block, 'left_rpm', Blockly.Python.ORDER_ATOMIC);
   var right_rpm = Blockly.Python.valueToCode(block, 'right_rpm', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot.set_target_rpm(" + left_rpm + ", " + right_rpm + ")\n";
+  var code = "visionbot.set_target_rpm(" + left_rpm + ", " + right_rpm + ")\n";
   return code;
 };
 
-// Block: kbot_pid_update
-Blockly.Blocks['kbot_pid_update'] = {
+// Block: visionbot_pid_update
+Blockly.Blocks['visionbot_pid_update'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_pid_update",
+      type: "visionbot_pid_update",
       message0: "Đặt PID tốc độ động cơ encoder Kp %1 Ki %2 Kd %3",
       previousStatement: null,
       nextStatement: null,
@@ -2099,26 +1973,26 @@ Blockly.Blocks['kbot_pid_update'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotPIDColor,
+      colour: VisionBotPIDColor,
       tooltip: "Cài đặt thông số PID cho motor (tự động chạy khi set_target_rpm)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_pid_update'] = function (block) {
+Blockly.Python['visionbot_pid_update'] = function (block) {
   var kp = Blockly.Python.valueToCode(block, 'kp', Blockly.Python.ORDER_ATOMIC);
   var ki = Blockly.Python.valueToCode(block, 'ki', Blockly.Python.ORDER_ATOMIC);
   var kd = Blockly.Python.valueToCode(block, 'kd', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot.pid_set(" + kp + ", " + ki + ", " + kd + ")\n";
+  var code = "visionbot.pid_set(" + kp + ", " + ki + ", " + kd + ")\n";
   return code;
 };
 
-// Block: kbot_pid_stop
-Blockly.Blocks['kbot_pid_stop'] = {
+// Block: visionbot_pid_stop
+Blockly.Blocks['visionbot_pid_stop'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_pid_stop",
+      type: "visionbot_pid_stop",
       message0: "Dừng động cơ %1",
       previousStatement: null,
       nextStatement: null,
@@ -2134,50 +2008,50 @@ Blockly.Blocks['kbot_pid_stop'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotPIDColor,
+      colour: VisionBotPIDColor,
       tooltip: "Dừng động cơ trái, phải hoặc cả hai (reset PID state nếu dừng cả hai)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_pid_stop'] = function (block) {
+Blockly.Python['visionbot_pid_stop'] = function (block) {
   var side = block.getFieldValue('side');
   if (side == 'left') {
-    return 'kbot._target_left = 0\nkbot_left.brake()\n';
+    return 'visionbot._target_left = 0\nvisionbot_left.brake()\n';
   } else if (side == 'right') {
-    return 'kbot._target_right = 0\nkbot_right.brake()\n';
+    return 'visionbot._target_right = 0\nvisionbot_right.brake()\n';
   }
-  return 'kbot.pid_stop()\nkbot.brake()\n';
+  return 'visionbot.pid_stop()\nvisionbot.brake()\n';
 };
 
-// Block: kbot_pid_reset
-Blockly.Blocks['kbot_pid_reset'] = {
+// Block: visionbot_pid_reset
+Blockly.Blocks['visionbot_pid_reset'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_pid_reset",
+      type: "visionbot_pid_reset",
       message0: "Reset PID tốc độ động cơ encoder",
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
-      colour: KBotPIDColor,
+      colour: VisionBotPIDColor,
       tooltip: "Reset PID state (không dừng motor)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_pid_reset'] = function (block) {
-  var code = "kbot.pid_reset()\n";
+Blockly.Python['visionbot_pid_reset'] = function (block) {
+  var code = "visionbot.pid_reset()\n";
   return code;
 };
 
-// Block: kbot_move_rpm (di chuyển theo hướng với RPM trong N giây)
-Blockly.Blocks['kbot_move_rpm'] = {
+// Block: visionbot_move_rpm (di chuyển theo hướng với RPM trong N giây)
+Blockly.Blocks['visionbot_move_rpm'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_move_rpm",
+      type: "visionbot_move_rpm",
       message0: "%1 tốc độ %2 RPM trong %3 giây",
       previousStatement: null,
       nextStatement: null,
@@ -2204,14 +2078,14 @@ Blockly.Blocks['kbot_move_rpm'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotPIDColor,
+      colour: VisionBotPIDColor,
       tooltip: "Di chuyển theo hướng với tốc độ RPM trong N giây rồi phanh",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_move_rpm'] = function (block) {
+Blockly.Python['visionbot_move_rpm'] = function (block) {
   var direction = block.getFieldValue('direction');
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
   var duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
@@ -2231,20 +2105,20 @@ Blockly.Python['kbot_move_rpm'] = function (block) {
     right_rpm = '-(' + speed + ')';
   }
 
-  var code = 'kbot.set_target_rpm(' + left_rpm + ', ' + right_rpm + ')\n';
+  var code = 'visionbot.set_target_rpm(' + left_rpm + ', ' + right_rpm + ')\n';
   code += 'await asleep_ms(int(' + duration + ' * 1000))\n';
-  code += 'kbot.pid_stop()\nkbot.brake()\n';
+  code += 'visionbot.pid_stop()\nvisionbot.brake()\n';
   return code;
 };
 
 // ============ Vision Tracking Blocks ============
 
-// Block: kbot_track_set_pid
-Blockly.Blocks['kbot_track_set_pid'] = {
+// Block: visionbot_track_set_pid
+Blockly.Blocks['visionbot_track_set_pid'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_set_pid",
-      message0: "KBOT tracking set PID %1 Kp %2 Ki %3 Kd %4",
+      type: "visionbot_track_set_pid",
+      message0: "VisionBot tracking set PID %1 Kp %2 Ki %3 Kd %4",
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2258,26 +2132,26 @@ Blockly.Blocks['kbot_track_set_pid'] = {
         { type: "input_value", name: "kd", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Cài đặt thông số PID cho trục X (lái) hoặc Y (tiến/lùi)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_set_pid'] = function (block) {
+Blockly.Python['visionbot_track_set_pid'] = function (block) {
   var axis = block.getFieldValue('AXIS');
   var kp = Blockly.Python.valueToCode(block, 'kp', Blockly.Python.ORDER_ATOMIC);
   var ki = Blockly.Python.valueToCode(block, 'ki', Blockly.Python.ORDER_ATOMIC);
   var kd = Blockly.Python.valueToCode(block, 'kd', Blockly.Python.ORDER_ATOMIC);
-  return "kbot.track_set_pid_" + axis + "(" + kp + ", " + ki + ", " + kd + ")\n";
+  return "visionbot.track_set_pid_" + axis + "(" + kp + ", " + ki + ", " + kd + ")\n";
 };
 
-// Block: kbot_track_set_pid_x
-Blockly.Blocks['kbot_track_set_pid_x'] = {
+// Block: visionbot_track_set_pid_x
+Blockly.Blocks['visionbot_track_set_pid_x'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_set_pid_x",
+      type: "visionbot_track_set_pid_x",
       message0: "Đặt PID theo hướng X (ngang) Kp %1 Ki %2 Kd %3",
       previousStatement: null,
       nextStatement: null,
@@ -2287,25 +2161,25 @@ Blockly.Blocks['kbot_track_set_pid_x'] = {
         { type: "input_value", name: "kd", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Cài đặt thông số PID cho trục X (ngang)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_set_pid_x'] = function (block) {
+Blockly.Python['visionbot_track_set_pid_x'] = function (block) {
   var kp = Blockly.Python.valueToCode(block, 'kp', Blockly.Python.ORDER_ATOMIC);
   var ki = Blockly.Python.valueToCode(block, 'ki', Blockly.Python.ORDER_ATOMIC);
   var kd = Blockly.Python.valueToCode(block, 'kd', Blockly.Python.ORDER_ATOMIC);
-  return "kbot.track_set_pid_x(" + kp + ", " + ki + ", " + kd + ")\n";
+  return "visionbot.track_set_pid_x(" + kp + ", " + ki + ", " + kd + ")\n";
 };
 
-// Block: kbot_track_set_pid_y
-Blockly.Blocks['kbot_track_set_pid_y'] = {
+// Block: visionbot_track_set_pid_y
+Blockly.Blocks['visionbot_track_set_pid_y'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_set_pid_y",
+      type: "visionbot_track_set_pid_y",
       message0: "Đặt PID theo hướng Y (dọc) Kp %1 Ki %2 Kd %3",
       previousStatement: null,
       nextStatement: null,
@@ -2315,25 +2189,25 @@ Blockly.Blocks['kbot_track_set_pid_y'] = {
         { type: "input_value", name: "kd", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Cài đặt thông số PID cho trục Y (dọc)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_set_pid_y'] = function (block) {
+Blockly.Python['visionbot_track_set_pid_y'] = function (block) {
   var kp = Blockly.Python.valueToCode(block, 'kp', Blockly.Python.ORDER_ATOMIC);
   var ki = Blockly.Python.valueToCode(block, 'ki', Blockly.Python.ORDER_ATOMIC);
   var kd = Blockly.Python.valueToCode(block, 'kd', Blockly.Python.ORDER_ATOMIC);
-  return "kbot.track_set_pid_y(" + kp + ", " + ki + ", " + kd + ")\n";
+  return "visionbot.track_set_pid_y(" + kp + ", " + ki + ", " + kd + ")\n";
 };
 
-// Block: kbot_track_set_speed
-Blockly.Blocks['kbot_track_set_speed'] = {
+// Block: visionbot_track_set_speed
+Blockly.Blocks['visionbot_track_set_speed'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_set_speed",
+      type: "visionbot_track_set_speed",
       message0: "Đặt tốc độ bám min %1 max %2",
       previousStatement: null,
       nextStatement: null,
@@ -2342,24 +2216,24 @@ Blockly.Blocks['kbot_track_set_speed'] = {
         { type: "input_value", name: "max_speed", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Cài đặt tốc độ tối thiểu và tối đa cho tracking",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_set_speed'] = function (block) {
+Blockly.Python['visionbot_track_set_speed'] = function (block) {
   var min_speed = Blockly.Python.valueToCode(block, 'min_speed', Blockly.Python.ORDER_ATOMIC);
   var max_speed = Blockly.Python.valueToCode(block, 'max_speed', Blockly.Python.ORDER_ATOMIC);
-  return "kbot.track_set_speed(" + min_speed + ", " + max_speed + ")\n";
+  return "visionbot.track_set_speed(" + min_speed + ", " + max_speed + ")\n";
 };
 
-// Block: kbot_track_update
-Blockly.Blocks['kbot_track_update'] = {
+// Block: visionbot_track_update
+Blockly.Blocks['visionbot_track_update'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_update",
+      type: "visionbot_track_update",
       message0: "Đặt mục tiêu ID %1 hướng %2 toạ độ %3",
       previousStatement: null,
       nextStatement: null,
@@ -2377,45 +2251,45 @@ Blockly.Blocks['kbot_track_update'] = {
         { type: "input_value", name: "target", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Đặt mục tiêu theo dõi đối tượng theo trục X (ngang) hoặc Y (dọc) từ dữ liệu camera",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_update'] = function (block) {
+Blockly.Python['visionbot_track_update'] = function (block) {
   var axis = block.getFieldValue('AXIS');
   var objectId = block.getFieldValue('OBJECT_ID');
   var target = Blockly.Python.valueToCode(block, 'target', Blockly.Python.ORDER_ATOMIC);
-  Blockly.Python.definitions_['kbot_track_cfg'] = '_track_cfg = {"x": None, "y": None}';
-  Blockly.Python.definitions_['kbot_track_step'] =
-    'async def _kbot_track_step():\n' +
+  Blockly.Python.definitions_['visionbot_track_cfg'] = '_track_cfg = {"x": None, "y": None}';
+  Blockly.Python.definitions_['visionbot_track_step'] =
+    'async def _visionbot_track_step():\n' +
     '    cfg_x = _track_cfg["x"]\n' +
     '    cfg_y = _track_cfg["y"]\n' +
     '    if not cfg_x and not cfg_y:\n' +
     '        return\n' +
     '    if cfg_x and cfg_y and cfg_x[0] == cfg_y[0]:\n' +
     '        blk = await husky.get_block(cfg_x[0])\n' +
-    '        kbot.track_x(blk["x"], cfg_x[1])\n' +
-    '        kbot.track_y(blk["y"], cfg_y[1])\n' +
+    '        visionbot.track_x(blk["x"], cfg_x[1])\n' +
+    '        visionbot.track_y(blk["y"], cfg_y[1])\n' +
     '    else:\n' +
     '        if cfg_x:\n' +
     '            blk = await husky.get_block(cfg_x[0])\n' +
-    '            kbot.track_x(blk["x"], cfg_x[1])\n' +
+    '            visionbot.track_x(blk["x"], cfg_x[1])\n' +
     '        if cfg_y:\n' +
     '            blk = await husky.get_block(cfg_y[0])\n' +
-    '            kbot.track_y(blk["y"], cfg_y[1])\n' +
-    '    kbot.set_target_rpm(kbot.track_vt, kbot.track_vp)';
+    '            visionbot.track_y(blk["y"], cfg_y[1])\n' +
+    '    visionbot.set_target_rpm(visionbot.track_vt, visionbot.track_vp)';
   return '_track_cfg["' + axis + '"] = (' + objectId + ', ' + target + ')\n';
 };
 
-// Block: kbot_track_speed (value block)
-Blockly.Blocks['kbot_track_speed'] = {
+// Block: visionbot_track_speed (value block)
+Blockly.Blocks['visionbot_track_speed'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_speed",
-      message0: "KBOT tracking %1",
+      type: "visionbot_track_speed",
+      message0: "VisionBot tracking %1",
       output: "Number",
       args0: [
         {
@@ -2424,61 +2298,61 @@ Blockly.Blocks['kbot_track_speed'] = {
           options: [["tốc độ trái", "track_vt"], ["tốc độ phải", "track_vp"]]
         }
       ],
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Đọc tốc độ tracking: vT (bánh trái) hoặc vP (bánh phải)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_speed'] = function (block) {
+Blockly.Python['visionbot_track_speed'] = function (block) {
   var output = block.getFieldValue('OUTPUT');
-  return ["kbot." + output, Blockly.Python.ORDER_MEMBER];
+  return ["visionbot." + output, Blockly.Python.ORDER_MEMBER];
 };
 
-// Block: kbot_track_follow
-Blockly.Blocks['kbot_track_follow'] = {
+// Block: visionbot_track_follow
+Blockly.Blocks['visionbot_track_follow'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_follow",
+      type: "visionbot_track_follow",
       message0: "Bám theo đối tượng",
       previousStatement: null,
       nextStatement: null,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Thực hiện 1 chu kỳ bám đối tượng. Đặt khối này trong vòng lặp.",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_follow'] = function (block) {
-  Blockly.Python.definitions_['kbot_track_cfg'] = '_track_cfg = {"x": None, "y": None}';
-  Blockly.Python.definitions_['kbot_track_step'] =
-    'async def _kbot_track_step():\n' +
+Blockly.Python['visionbot_track_follow'] = function (block) {
+  Blockly.Python.definitions_['visionbot_track_cfg'] = '_track_cfg = {"x": None, "y": None}';
+  Blockly.Python.definitions_['visionbot_track_step'] =
+    'async def _visionbot_track_step():\n' +
     '    cfg_x = _track_cfg["x"]\n' +
     '    cfg_y = _track_cfg["y"]\n' +
     '    if not cfg_x and not cfg_y:\n' +
     '        return\n' +
     '    if cfg_x and cfg_y and cfg_x[0] == cfg_y[0]:\n' +
     '        blk = await husky.get_block(cfg_x[0])\n' +
-    '        kbot.track_x(blk["x"], cfg_x[1])\n' +
-    '        kbot.track_y(blk["y"], cfg_y[1])\n' +
+    '        visionbot.track_x(blk["x"], cfg_x[1])\n' +
+    '        visionbot.track_y(blk["y"], cfg_y[1])\n' +
     '    else:\n' +
     '        if cfg_x:\n' +
     '            blk = await husky.get_block(cfg_x[0])\n' +
-    '            kbot.track_x(blk["x"], cfg_x[1])\n' +
+    '            visionbot.track_x(blk["x"], cfg_x[1])\n' +
     '        if cfg_y:\n' +
     '            blk = await husky.get_block(cfg_y[0])\n' +
-    '            kbot.track_y(blk["y"], cfg_y[1])\n' +
-    '    kbot.set_target_rpm(kbot.track_vt, kbot.track_vp)';
-  return 'await _kbot_track_step()\n';
+    '            visionbot.track_y(blk["y"], cfg_y[1])\n' +
+    '    visionbot.set_target_rpm(visionbot.track_vt, visionbot.track_vp)';
+  return 'await _visionbot_track_step()\n';
 };
 
-// Block: kbot_track_follow_for
-Blockly.Blocks['kbot_track_follow_for'] = {
+// Block: visionbot_track_follow_for
+Blockly.Blocks['visionbot_track_follow_for'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_follow_for",
+      type: "visionbot_track_follow_for",
       message0: "Bám theo đối tượng trong %1 giây rồi dừng",
       previousStatement: null,
       nextStatement: null,
@@ -2486,68 +2360,68 @@ Blockly.Blocks['kbot_track_follow_for'] = {
         { type: "input_value", name: "duration", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Bám đối tượng trong N giây rồi phanh gấp",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_follow_for'] = function (block) {
-  Blockly.Python.definitions_['kbot_track_cfg'] = '_track_cfg = {"x": None, "y": None}';
-  Blockly.Python.definitions_['kbot_track_step'] =
-    'async def _kbot_track_step():\n' +
+Blockly.Python['visionbot_track_follow_for'] = function (block) {
+  Blockly.Python.definitions_['visionbot_track_cfg'] = '_track_cfg = {"x": None, "y": None}';
+  Blockly.Python.definitions_['visionbot_track_step'] =
+    'async def _visionbot_track_step():\n' +
     '    cfg_x = _track_cfg["x"]\n' +
     '    cfg_y = _track_cfg["y"]\n' +
     '    if not cfg_x and not cfg_y:\n' +
     '        return\n' +
     '    if cfg_x and cfg_y and cfg_x[0] == cfg_y[0]:\n' +
     '        blk = await husky.get_block(cfg_x[0])\n' +
-    '        kbot.track_x(blk["x"], cfg_x[1])\n' +
-    '        kbot.track_y(blk["y"], cfg_y[1])\n' +
+    '        visionbot.track_x(blk["x"], cfg_x[1])\n' +
+    '        visionbot.track_y(blk["y"], cfg_y[1])\n' +
     '    else:\n' +
     '        if cfg_x:\n' +
     '            blk = await husky.get_block(cfg_x[0])\n' +
-    '            kbot.track_x(blk["x"], cfg_x[1])\n' +
+    '            visionbot.track_x(blk["x"], cfg_x[1])\n' +
     '        if cfg_y:\n' +
     '            blk = await husky.get_block(cfg_y[0])\n' +
-    '            kbot.track_y(blk["y"], cfg_y[1])\n' +
-    '    kbot.set_target_rpm(kbot.track_vt, kbot.track_vp)';
+    '            visionbot.track_y(blk["y"], cfg_y[1])\n' +
+    '    visionbot.set_target_rpm(visionbot.track_vt, visionbot.track_vp)';
   Blockly.Python.definitions_['import_ticks'] = 'from time import ticks_ms';
   var duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
   return (
     '_t_end = ticks_ms() + int((' + duration + ') * 1000)\n' +
     'while ticks_ms() < _t_end:\n' +
-    '    await _kbot_track_step()\n' +
+    '    await _visionbot_track_step()\n' +
     '    await asleep_ms(50)\n' +
-    'kbot.brake()\n'
+    'visionbot.brake()\n'
   );
 };
 
-// Block: kbot_track_stop
-Blockly.Blocks['kbot_track_stop'] = {
+// Block: visionbot_track_stop
+Blockly.Blocks['visionbot_track_stop'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_track_stop",
+      type: "visionbot_track_stop",
       message0: "Dừng bám theo đối tượng",
       previousStatement: null,
       nextStatement: null,
-      colour: KBotTrackColor,
+      colour: VisionBotTrackColor,
       tooltip: "Dừng động cơ ngay lập tức",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_track_stop'] = function (block) {
-  return 'kbot.pid_stop()\nkbot.brake()\n';
+Blockly.Python['visionbot_track_stop'] = function (block) {
+  return 'visionbot.pid_stop()\nvisionbot.brake()\n';
 };
 
-// Block 10: kbot_motor_run
-Blockly.Blocks['kbot_motor_run'] = {
+// Block 10: visionbot_motor_run
+Blockly.Blocks['visionbot_motor_run'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_motor_run",
+      type: "visionbot_motor_run",
       message0: "Động cơ %1 quay tốc độ %2 %% đảo chiều %3",
       previousStatement: null,
       nextStatement: null,
@@ -2577,14 +2451,14 @@ Blockly.Blocks['kbot_motor_run'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotTestColor,
+      colour: VisionBotTestColor,
       tooltip: "Quay động cơ với tốc độ chỉ định (0 để dừng)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_motor_run'] = function (block) {
+Blockly.Python['visionbot_motor_run'] = function (block) {
   var motor = block.getFieldValue('motor');
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
   var reverse = block.getFieldValue('reverse');
@@ -2595,11 +2469,11 @@ Blockly.Python['kbot_motor_run'] = function (block) {
   return code;
 };
 
-// Block: kbot_motor_run_for (quay trong N giây)
-Blockly.Blocks['kbot_motor_run_for'] = {
+// Block: visionbot_motor_run_for (quay trong N giây)
+Blockly.Blocks['visionbot_motor_run_for'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_motor_run_for",
+      type: "visionbot_motor_run_for",
       message0: "Động cơ %1 quay tốc độ %2 %% trong %3 giây đảo chiều %4",
       previousStatement: null,
       nextStatement: null,
@@ -2626,14 +2500,14 @@ Blockly.Blocks['kbot_motor_run_for'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotTestColor,
+      colour: VisionBotTestColor,
       tooltip: "Quay động cơ với tốc độ chỉ định trong N giây rồi dừng",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_motor_run_for'] = function (block) {
+Blockly.Python['visionbot_motor_run_for'] = function (block) {
   var motor = block.getFieldValue('motor');
   var speed = Blockly.Python.valueToCode(block, 'speed', Blockly.Python.ORDER_ATOMIC);
   var duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
@@ -2647,11 +2521,11 @@ Blockly.Python['kbot_motor_run_for'] = function (block) {
   return code;
 };
 
-// Block: kbot_motor_stop (dừng động cơ M1-M4)
-Blockly.Blocks['kbot_motor_stop'] = {
+// Block: visionbot_motor_stop (dừng động cơ M1-M4)
+Blockly.Blocks['visionbot_motor_stop'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_motor_stop",
+      type: "visionbot_motor_stop",
       message0: "Dừng động cơ %1",
       previousStatement: null,
       nextStatement: null,
@@ -2668,51 +2542,51 @@ Blockly.Blocks['kbot_motor_stop'] = {
         }
       ],
       inputsInline: true,
-      colour: KBotTestColor,
+      colour: VisionBotTestColor,
       tooltip: "Dừng động cơ chỉ định",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_motor_stop'] = function (block) {
+Blockly.Python['visionbot_motor_stop'] = function (block) {
   var motor = block.getFieldValue('motor');
   Blockly.Python.definitions_['import_robotics_mdv2'] = 'from mdv2 import *';
   Blockly.Python.definitions_['init_motor_driver_v2'] = 'md_v2 = MotorDriverV2()';
   return 'md_v2.stop(' + motor + ')\n';
 };
 
-// ============ KBOT Test Print Speed ============
+// ============ VisionBot Test Print Speed ============
 
-// Block: kbot_print_speed (in ra tốc độ 2 động cơ)
-Blockly.Blocks['kbot_print_speed'] = {
+// Block: visionbot_print_speed (in ra tốc độ 2 động cơ)
+Blockly.Blocks['visionbot_print_speed'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_print_speed",
+      type: "visionbot_print_speed",
       message0: "In tốc độ 2 động cơ",
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
-      colour: KBotTestColor,
+      colour: VisionBotTestColor,
       tooltip: "In tốc độ RPM của 2 động cơ encoder ra terminal",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_print_speed'] = function (block) {
-  var code = 'print("L:", kbot_left.speed(), "R:", kbot_right.speed())\n';
+Blockly.Python['visionbot_print_speed'] = function (block) {
+  var code = 'print("L:", visionbot_left.speed(), "R:", visionbot_right.speed())\n';
   return code;
 };
 
-// ============ KBOT Gamepad ============
+// ============ VisionBot Gamepad ============
 
-// Block: kbot_gamepad_init
-Blockly.Blocks['kbot_gamepad_init'] = {
+// Block: visionbot_gamepad_init
+Blockly.Blocks['visionbot_gamepad_init'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_gamepad_init",
+      type: "visionbot_gamepad_init",
       message0: "Bật chế độ gamepad với độ nhạy %1",
       previousStatement: null,
       nextStatement: null,
@@ -2724,7 +2598,7 @@ Blockly.Blocks['kbot_gamepad_init'] = {
           name: "accel_steps",
         },
       ],
-      colour: KBotGamepadColor,
+      colour: VisionBotGamepadColor,
       inputsInline: true,
       tooltip: "Khởi tạo gamepad và bật điều khiển từ xa",
       helpUrl: ""
@@ -2732,7 +2606,7 @@ Blockly.Blocks['kbot_gamepad_init'] = {
   },
 };
 
-Blockly.Python['kbot_gamepad_init'] = function (block) {
+Blockly.Python['visionbot_gamepad_init'] = function (block) {
   var steps = Blockly.Python.valueToCode(block, 'accel_steps', Blockly.Python.ORDER_ATOMIC);
   Blockly.Python.definitions_['import_ble'] = 'from ble import *';
   Blockly.Python.definitions_['import_robotics_gamepad'] = 'from gamepad import *';
@@ -2740,15 +2614,15 @@ Blockly.Python['kbot_gamepad_init'] = function (block) {
 
   var code = 'create_task(ble.wait_for_msg())\n';
   code += 'create_task(gamepad.run())\n';
-  code += 'create_task(kbot.run_teleop(gamepad, accel_steps=' + steps + '))\n';
+  code += 'create_task(visionbot.run_teleop(gamepad, accel_steps=' + steps + '))\n';
   return code;
 };
 
-// Block: kbot_gamepad_on_button
-Blockly.Blocks['kbot_gamepad_on_button'] = {
+// Block: visionbot_gamepad_on_button
+Blockly.Blocks['visionbot_gamepad_on_button'] = {
   init: function () {
     this.jsonInit({
-      colour: KBotGamepadColor,
+      colour: VisionBotGamepadColor,
       message0: "Khi nhấn nút %1 %2 %3",
       tooltip: "Thực hiện hành động khi nhấn nút trên gamepad",
       args0: [
@@ -2851,7 +2725,7 @@ Blockly.Blocks['kbot_gamepad_on_button'] = {
   }
 };
 
-Blockly.Python['kbot_gamepad_on_button'] = function (block) {
+Blockly.Python['visionbot_gamepad_on_button'] = function (block) {
   var button = block.getFieldValue('BUTTON');
   var statements_action = Blockly.Python.statementToCode(block, 'ACTION');
 
@@ -2868,17 +2742,17 @@ Blockly.Python['kbot_gamepad_on_button'] = function (block) {
         statements_action || Blockly.Python.PASS
       ]);
 
-  var code = 'kbot.on_teleop_command(' + button + ', ' + cbFunctionName + ')';
-  Blockly.Python.definitions_['setup_kbot_on_teleop_command' + button] = code;
+  var code = 'visionbot.on_teleop_command(' + button + ', ' + cbFunctionName + ')';
+  Blockly.Python.definitions_['setup_visionbot_on_teleop_command' + button] = code;
 
   return '';
 };
 
-// Block: kbot_gamepad_read_button
-Blockly.Blocks['kbot_gamepad_read_button'] = {
+// Block: visionbot_gamepad_read_button
+Blockly.Blocks['visionbot_gamepad_read_button'] = {
   init: function () {
     this.jsonInit({
-      colour: KBotGamepadColor,
+      colour: VisionBotGamepadColor,
       tooltip: "Đọc trạng thái nút gamepad",
       message0: "Nút %1 được nhấn?",
       args0: [
@@ -2971,17 +2845,17 @@ Blockly.Blocks['kbot_gamepad_read_button'] = {
   },
 };
 
-Blockly.Python['kbot_gamepad_read_button'] = function (block) {
+Blockly.Python['visionbot_gamepad_read_button'] = function (block) {
   var button = block.getFieldValue("BUTTON");
   var code = 'gamepad.data[' + button + '] == 1';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
-// Block: kbot_gamepad_read_joystick
-Blockly.Blocks['kbot_gamepad_read_joystick'] = {
+// Block: visionbot_gamepad_read_joystick
+Blockly.Blocks['visionbot_gamepad_read_joystick'] = {
   init: function () {
     this.jsonInit({
-      colour: KBotGamepadColor,
+      colour: VisionBotGamepadColor,
       tooltip: "Đọc giá trị joystick",
       message0: "Joystick %1 giá trị %2",
       args0: [
@@ -3010,18 +2884,18 @@ Blockly.Blocks['kbot_gamepad_read_joystick'] = {
   },
 };
 
-Blockly.Python['kbot_gamepad_read_joystick'] = function (block) {
+Blockly.Python['visionbot_gamepad_read_joystick'] = function (block) {
   var joystick = block.getFieldValue("joystick");
   var data = block.getFieldValue("data");
   var code = 'gamepad.data[' + joystick + data + ']';
   return [code, Blockly.Python.ORDER_NONE];
 };
 
-// Block: kbot_gamepad_pause
-Blockly.Blocks['kbot_gamepad_pause'] = {
+// Block: visionbot_gamepad_pause
+Blockly.Blocks['visionbot_gamepad_pause'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_gamepad_pause",
+      type: "visionbot_gamepad_pause",
       message0: "Gamepad %1",
       previousStatement: null,
       nextStatement: null,
@@ -3035,7 +2909,7 @@ Blockly.Blocks['kbot_gamepad_pause'] = {
           ],
         },
       ],
-      colour: KBotGamepadColor,
+      colour: VisionBotGamepadColor,
       inputsInline: true,
       tooltip: "Tạm dừng hoặc tiếp tục điều khiển gamepad",
       helpUrl: ""
@@ -3043,55 +2917,55 @@ Blockly.Blocks['kbot_gamepad_pause'] = {
   },
 };
 
-Blockly.Python['kbot_gamepad_pause'] = function (block) {
+Blockly.Python['visionbot_gamepad_pause'] = function (block) {
   var action = block.getFieldValue("action");
-  var code = "kbot.mode_auto = " + action + "\n";
+  var code = "visionbot.mode_auto = " + action + "\n";
   return code;
 };
 
-// ============ KBOT Line Sensor ============
+// ============ VisionBot Line Sensor ============
 
-// Block: kbot_line_sensor_init
-Blockly.Blocks['kbot_line_sensor_init'] = {
+// Block: visionbot_line_sensor_init
+Blockly.Blocks['visionbot_line_sensor_init'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_init",
+      type: "visionbot_line_sensor_init",
       message0: "Khởi tạo cảm biến dò line A chân I2C",
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
-      colour: KBotLineColor,
+      colour: VisionBotLineColorA,
       tooltip: "Khởi tạo cảm biến dò line A (gắn vào cổng I2C cố định)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_line_sensor_init'] = function (block) {
+Blockly.Python['visionbot_line_sensor_init'] = function (block) {
   Blockly.Python.definitions_['import_robotics_line_sensor'] = 'from line_sensor import *';
   Blockly.Python.definitions_['init_robotics_line_sensor'] = 'line_sensor = LineSensorI2C()';
   return '';
 };
 
-// Block: kbot_line_sensor_update
-Blockly.Blocks['kbot_line_sensor_update'] = {
+// Block: visionbot_line_sensor_update
+Blockly.Blocks['visionbot_line_sensor_update'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_update",
+      type: "visionbot_line_sensor_update",
       message0: "Cập nhật cảm biến dò line A",
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
-      colour: KBotLineColor,
+      colour: VisionBotLineColorA,
       tooltip: "Đọc và lưu trạng thái 4 mắt cảm biến A (dùng trước khi đọc giá trị)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_line_sensor_update'] = function (block) {
+Blockly.Python['visionbot_line_sensor_update'] = function (block) {
   Blockly.Python.definitions_['import_robotics_line_sensor'] = 'from line_sensor import *';
   Blockly.Python.definitions_['init_robotics_line_sensor'] = 'line_sensor = LineSensorI2C()';
   Blockly.Python.definitions_['init_ls_a_cache'] = '_ls_a = (0, 0, 0, 0)';
@@ -3099,11 +2973,11 @@ Blockly.Python['kbot_line_sensor_update'] = function (block) {
   return code;
 };
 
-// Block: kbot_line_sensor_read_all
-Blockly.Blocks['kbot_line_sensor_read_all'] = {
+// Block: visionbot_line_sensor_read_all
+Blockly.Blocks['visionbot_line_sensor_read_all'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_read_all",
+      type: "visionbot_line_sensor_read_all",
       message0: "Đọc cảm biến dò line A %1 %2 %3 %4",
       args0: [
         {
@@ -3203,7 +3077,7 @@ Blockly.Blocks['kbot_line_sensor_read_all'] = {
           ]
         }
       ],
-      colour: KBotLineColor,
+      colour: VisionBotLineColorA,
       output: "Boolean",
       tooltip: "Kiểm tra trạng thái 4 cảm biến dò line",
       helpUrl: ""
@@ -3211,7 +3085,7 @@ Blockly.Blocks['kbot_line_sensor_read_all'] = {
   }
 };
 
-Blockly.Python['kbot_line_sensor_read_all'] = function (block) {
+Blockly.Python['visionbot_line_sensor_read_all'] = function (block) {
   Blockly.Python.definitions_['import_line_sensor'] = 'from line_sensor import *';
   Blockly.Python.definitions_['init_robotics_line_sensor'] = 'line_sensor = LineSensorI2C()';
   Blockly.Python.definitions_['init_ls_a_cache'] = '_ls_a = (0, 0, 0, 0)';
@@ -3223,11 +3097,11 @@ Blockly.Python['kbot_line_sensor_read_all'] = function (block) {
   return [code, Blockly.Python.ORDER_NONE];
 };
 
-// Block: kbot_line_sensor_read
-Blockly.Blocks['kbot_line_sensor_read'] = {
+// Block: visionbot_line_sensor_read
+Blockly.Blocks['visionbot_line_sensor_read'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_read",
+      type: "visionbot_line_sensor_read",
       message0: "Đọc cảm biến dò line %1",
       args0: [
         {
@@ -3241,7 +3115,7 @@ Blockly.Blocks['kbot_line_sensor_read'] = {
           ],
         },
       ],
-      colour: KBotLineColor,
+      colour: VisionBotLineColorA,
       output: "Boolean",
       tooltip: "Đọc giá trị một cảm biến dò line",
       helpUrl: ""
@@ -3249,7 +3123,7 @@ Blockly.Blocks['kbot_line_sensor_read'] = {
   }
 };
 
-Blockly.Python['kbot_line_sensor_read'] = function (block) {
+Blockly.Python['visionbot_line_sensor_read'] = function (block) {
   Blockly.Python.definitions_['init_ls_a_cache'] = '_ls_a = (0, 0, 0, 0)';
   var port = block.getFieldValue("port");
   var code = "_ls_a[" + port + "]";
@@ -3258,11 +3132,11 @@ Blockly.Python['kbot_line_sensor_read'] = function (block) {
 
 // ============ Line Sensor B (cảm biến thứ 2 — gắn vào GPIO D3-D8) ============
 
-// Block: kbot_line_sensor_b_init
-Blockly.Blocks['kbot_line_sensor_b_init'] = {
+// Block: visionbot_line_sensor_b_init
+Blockly.Blocks['visionbot_line_sensor_b_init'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_b_init",
+      type: "visionbot_line_sensor_b_init",
       message0: "Khởi tạo cảm biến dò line B chân SCL %1 SDA %2",
       args0: [
         {
@@ -3287,14 +3161,14 @@ Blockly.Blocks['kbot_line_sensor_b_init'] = {
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
-      colour: KBotLineColor,
+      colour: VisionBotLineColorB,
       tooltip: "Khởi tạo cảm biến dò line B (cảm biến thứ 2, gắn vào GPIO)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_line_sensor_b_init'] = function (block) {
+Blockly.Python['visionbot_line_sensor_b_init'] = function (block) {
   var sclPin = block.getFieldValue('scl_pin');
   var sdaPin = block.getFieldValue('sda_pin');
   Blockly.Python.definitions_['import_line_sensor_dual'] = 'from line_sensor_dual import LineSensor2I2C';
@@ -3304,32 +3178,32 @@ Blockly.Python['kbot_line_sensor_b_init'] = function (block) {
   return '';
 };
 
-// Block: kbot_line_sensor_b_update
-Blockly.Blocks['kbot_line_sensor_b_update'] = {
+// Block: visionbot_line_sensor_b_update
+Blockly.Blocks['visionbot_line_sensor_b_update'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_b_update",
+      type: "visionbot_line_sensor_b_update",
       message0: "Cập nhật cảm biến dò line B",
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
-      colour: KBotLineColor,
+      colour: VisionBotLineColorB,
       tooltip: "Đọc và lưu trạng thái 4 mắt cảm biến B (dùng trước khi đọc giá trị)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_line_sensor_b_update'] = function (block) {
+Blockly.Python['visionbot_line_sensor_b_update'] = function (block) {
   Blockly.Python.definitions_['import_line_sensor_dual'] = 'from line_sensor_dual import LineSensor2I2C';
   Blockly.Python.definitions_['init_ls_b_cache'] = '_ls_b = (0, 0, 0, 0)';
   var code = "global _ls_b\n_ls_b = line_sensor_b.read_ss2()\n";
   return code;
 };
 
-// Block: kbot_line_sensor_b_read_all
-Blockly.Blocks['kbot_line_sensor_b_read_all'] = {
+// Block: visionbot_line_sensor_b_read_all
+Blockly.Blocks['visionbot_line_sensor_b_read_all'] = {
   init: function () {
     var dropdownOptions = function () {
       return [
@@ -3344,7 +3218,7 @@ Blockly.Blocks['kbot_line_sensor_b_read_all'] = {
       ];
     };
     this.jsonInit({
-      type: "kbot_line_sensor_b_read_all",
+      type: "visionbot_line_sensor_b_read_all",
       message0: "Đọc cảm biến dò line B %1 %2 %3 %4",
       args0: [
         { type: "field_dropdown", name: "S1", options: dropdownOptions() },
@@ -3352,7 +3226,7 @@ Blockly.Blocks['kbot_line_sensor_b_read_all'] = {
         { type: "field_dropdown", name: "S3", options: dropdownOptions() },
         { type: "field_dropdown", name: "S4", options: dropdownOptions() }
       ],
-      colour: KBotLineColor,
+      colour: VisionBotLineColorB,
       output: "Boolean",
       tooltip: "Kiểm tra trạng thái 4 cảm biến dò line B",
       helpUrl: ""
@@ -3360,7 +3234,7 @@ Blockly.Blocks['kbot_line_sensor_b_read_all'] = {
   }
 };
 
-Blockly.Python['kbot_line_sensor_b_read_all'] = function (block) {
+Blockly.Python['visionbot_line_sensor_b_read_all'] = function (block) {
   Blockly.Python.definitions_['init_ls_b_cache'] = '_ls_b = (0, 0, 0, 0)';
   var S1 = block.getFieldValue("S1");
   var S2 = block.getFieldValue("S2");
@@ -3370,11 +3244,11 @@ Blockly.Python['kbot_line_sensor_b_read_all'] = function (block) {
   return [code, Blockly.Python.ORDER_NONE];
 };
 
-// Block: kbot_line_sensor_b_read
-Blockly.Blocks['kbot_line_sensor_b_read'] = {
+// Block: visionbot_line_sensor_b_read
+Blockly.Blocks['visionbot_line_sensor_b_read'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_line_sensor_b_read",
+      type: "visionbot_line_sensor_b_read",
       message0: "Đọc cảm biến dò line %1",
       args0: [
         {
@@ -3388,7 +3262,7 @@ Blockly.Blocks['kbot_line_sensor_b_read'] = {
           ]
         }
       ],
-      colour: KBotLineColor,
+      colour: VisionBotLineColorB,
       output: "Boolean",
       tooltip: "Đọc giá trị một cảm biến dò line B",
       helpUrl: ""
@@ -3396,7 +3270,7 @@ Blockly.Blocks['kbot_line_sensor_b_read'] = {
   }
 };
 
-Blockly.Python['kbot_line_sensor_b_read'] = function (block) {
+Blockly.Python['visionbot_line_sensor_b_read'] = function (block) {
   Blockly.Python.definitions_['init_ls_b_cache'] = '_ls_b = (0, 0, 0, 0)';
   var port = block.getFieldValue("port");
   var code = "_ls_b[" + port + "]";
@@ -3415,15 +3289,15 @@ Blockly.Python['kbot_line_sensor_b_read'] = function (block) {
 
 
 
-// ============ KBOT Camera Line Following Blocks ============
+// ============ VisionBot Camera Line Following Blocks ============
 
-const KBotCameraLineColor = "#8B4513";
+const VisionBotCameraLineColor = "#9c5a1a";
 
-// Block: kbot_camera_line_speed_set
-Blockly.Blocks['kbot_camera_line_speed_set'] = {
+// Block: visionbot_camera_line_speed_set
+Blockly.Blocks['visionbot_camera_line_speed_set'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_camera_line_speed_set",
+      type: "visionbot_camera_line_speed_set",
       message0: "Đặt tốc độ dò line min %1 max %2 RPM",
       previousStatement: null,
       nextStatement: null,
@@ -3432,25 +3306,25 @@ Blockly.Blocks['kbot_camera_line_speed_set'] = {
         { type: "input_value", name: "max_speed", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotCameraLineColor,
+      colour: VisionBotCameraLineColor,
       tooltip: "Đặt tốc độ tối thiểu (khi cua) và tối đa (khi thẳng) cho dò line camera",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_camera_line_speed_set'] = function (block) {
+Blockly.Python['visionbot_camera_line_speed_set'] = function (block) {
   var min_speed = Blockly.Python.valueToCode(block, 'min_speed', Blockly.Python.ORDER_ATOMIC);
   var max_speed = Blockly.Python.valueToCode(block, 'max_speed', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot._cl_min_speed = " + min_speed + "\nkbot._cl_base_speed = " + max_speed + "\n";
+  var code = "visionbot._cl_min_speed = " + min_speed + "\nvisionbot._cl_base_speed = " + max_speed + "\n";
   return code;
 };
 
-// Block: kbot_camera_line_pid_set
-Blockly.Blocks['kbot_camera_line_pid_set'] = {
+// Block: visionbot_camera_line_pid_set
+Blockly.Blocks['visionbot_camera_line_pid_set'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_camera_line_pid_set",
+      type: "visionbot_camera_line_pid_set",
       message0: "Đặt PID dò line Kp %1 Ki %2 Kd %3",
       previousStatement: null,
       nextStatement: null,
@@ -3460,26 +3334,26 @@ Blockly.Blocks['kbot_camera_line_pid_set'] = {
         { type: "input_value", name: "kd", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotCameraLineColor,
+      colour: VisionBotCameraLineColor,
       tooltip: "Cài đặt PID cho dò line bằng camera HuskyLens (target X mặc định = tâm màn hình 160)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_camera_line_pid_set'] = function (block) {
+Blockly.Python['visionbot_camera_line_pid_set'] = function (block) {
   var kp = Blockly.Python.valueToCode(block, 'kp', Blockly.Python.ORDER_ATOMIC);
   var ki = Blockly.Python.valueToCode(block, 'ki', Blockly.Python.ORDER_ATOMIC);
   var kd = Blockly.Python.valueToCode(block, 'kd', Blockly.Python.ORDER_ATOMIC);
-  var code = "kbot.camera_line_pid_set(" + kp + ", " + ki + ", " + kd + ", target_x=160)\n";
+  var code = "visionbot.camera_line_pid_set(" + kp + ", " + ki + ", " + kd + ", target_x=160)\n";
   return code;
 };
 
-// Block: kbot_follow_line_camera_by_time
-Blockly.Blocks['kbot_follow_line_camera_by_time'] = {
+// Block: visionbot_follow_line_camera_by_time
+Blockly.Blocks['visionbot_follow_line_camera_by_time'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_follow_line_camera_by_time",
+      type: "visionbot_follow_line_camera_by_time",
       message0: "Dò line camera trong %1 giây rồi dừng",
       previousStatement: null,
       nextStatement: null,
@@ -3487,69 +3361,70 @@ Blockly.Blocks['kbot_follow_line_camera_by_time'] = {
         { type: "input_value", name: "duration", check: "Number" }
       ],
       inputsInline: true,
-      colour: KBotCameraLineColor,
+      colour: VisionBotCameraLineColor,
       tooltip: "Dò line bằng camera HuskyLens trong N giây rồi phanh gấp",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_follow_line_camera_by_time'] = function (block) {
+Blockly.Python['visionbot_follow_line_camera_by_time'] = function (block) {
   var duration = Blockly.Python.valueToCode(block, 'duration', Blockly.Python.ORDER_ATOMIC);
   Blockly.Python.definitions_['import_huskylens'] = 'from HuskyLens import HuskyLens';
   Blockly.Python.definitions_['import_setting_pins'] = 'from setting import SDA_PIN, SCL_PIN';
   Blockly.Python.definitions_['init_huskylens'] = 'husky = HuskyLens(sda_pin=SDA_PIN, scl_pin=SCL_PIN)';
   var code = "_cl_start = ticks_ms()\n";
   code += "while ticks_ms() - _cl_start < " + duration + " * 1000:\n";
-  code += "  await kbot.camera_line_step(husky)\n";
+  code += "  await visionbot.camera_line_step(husky)\n";
   code += "  await asleep_ms(50)\n";
-  code += "kbot.brake()\n";
+  code += "visionbot.brake()\n";
   return code;
 };
 
-// Block: kbot_follow_line_camera
-Blockly.Blocks['kbot_follow_line_camera'] = {
+// Block: visionbot_follow_line_camera
+Blockly.Blocks['visionbot_follow_line_camera'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_follow_line_camera",
+      type: "visionbot_follow_line_camera",
       message0: "Dò line camera",
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
-      colour: KBotCameraLineColor,
+      colour: VisionBotCameraLineColor,
       tooltip: "Dò line bằng camera HuskyLens liên tục (dùng khối Dừng dò line camera để dừng)",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_follow_line_camera'] = function (block) {
+Blockly.Python['visionbot_follow_line_camera'] = function (block) {
   Blockly.Python.definitions_['import_huskylens'] = 'from HuskyLens import HuskyLens';
   Blockly.Python.definitions_['import_setting_pins'] = 'from setting import SDA_PIN, SCL_PIN';
   Blockly.Python.definitions_['init_huskylens'] = 'husky = HuskyLens(sda_pin=SDA_PIN, scl_pin=SCL_PIN)';
-  var code = "await kbot.camera_line_step(husky)\n";
+  var code = "await visionbot.camera_line_step(husky)\n";
   return code;
 };
 
-// Block: kbot_follow_line_camera_stop
-Blockly.Blocks['kbot_follow_line_camera_stop'] = {
+// Block: visionbot_follow_line_camera_stop
+Blockly.Blocks['visionbot_follow_line_camera_stop'] = {
   init: function () {
     this.jsonInit({
-      type: "kbot_follow_line_camera_stop",
+      type: "visionbot_follow_line_camera_stop",
       message0: "Dừng dò line camera",
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
-      colour: KBotCameraLineColor,
+      colour: VisionBotCameraLineColor,
       tooltip: "Dừng dò line bằng camera",
       helpUrl: ""
     });
   }
 };
 
-Blockly.Python['kbot_follow_line_camera_stop'] = function (block) {
-  var code = "kbot.pid_stop()\nkbot.brake()\n";
+Blockly.Python['visionbot_follow_line_camera_stop'] = function (block) {
+  var code = "visionbot.pid_stop()\nvisionbot.brake()\n";
   return code;
 };
+

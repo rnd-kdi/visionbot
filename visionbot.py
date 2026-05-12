@@ -4,7 +4,7 @@ from time import ticks_ms
 from constants import *
 
 
-class KBot:
+class VisionBot:
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -48,22 +48,23 @@ class KBot:
         self._cl_noise_count = 0
         self._cl_stable_count = 0
         # Vision tracking PID state
-        self._tx_kp = 0.45
+        self._tx_kp = 0.6
         self._tx_ki = 0
-        self._tx_kd = 0.25
-        self._ty_kp = 0.8
+        self._tx_kd = 1.4
+        self._ty_kp = 1.6
         self._ty_ki = 0
-        self._ty_kd = 0.52
+        self._ty_kd = 1.5
         self._tx_lerr = 0
         self._tx_int = 0
         self._ty_lerr = 0
         self._ty_int = 0
         self._tx_out = 0
         self._ty_out = 0
-        self._t_min = 30
-        self._t_max = 300
+        self._t_min = 25
+        self._t_max = 150
         self._t_dz = 5
         self._t_imax = 50
+        self._t_ref = 100  # output PID raw "danh nghĩa" — scale = _t_max / _t_ref
 
     def speed(self, speed, min_speed=None):
         self._speed = speed
@@ -191,7 +192,7 @@ class KBot:
     async def _pid_loop(self):
         while self._pid_running:
             self._pid_update()
-            await asyncio.sleep_ms(30)
+            await asyncio.sleep_ms(50)
 
     def _pid_update(self):
         if not self.left._encoder_enabled or not self.right._encoder_enabled:
@@ -199,11 +200,10 @@ class KBot:
             self.right.run(self._target_right)
             return
 
-        # Skip update for any wheel with zero target (already braked by set_target_rpm/external brake)
-        skip_left = (self._target_left == 0)
-        skip_right = (self._target_right == 0)
-
-        if skip_left and skip_right:
+        # Handle zero target
+        if self._target_left == 0 and self._target_right == 0:
+            self.left.brake()
+            self.right.brake()
             return
 
         # Feedforward: estimate duty from target RPM
@@ -248,10 +248,8 @@ class KBot:
 
         self._last_error_left = self._error_left
         self._last_error_right = self._error_right
-        if not skip_left:
-            self.left.run(duty_left)
-        if not skip_right:
-            self.right.run(duty_right)
+        self.left.run(duty_left)
+        self.right.run(duty_right)
 
     def pid_reset(self):
         self._error_left = 0
@@ -461,6 +459,7 @@ class KBot:
 
     async def camera_line_step(self, husky):
         """One step of camera line following. Call in a loop every 50ms."""
+        husky.set_algorithm(3)  # auto switch to Line Tracking
         arrow = await husky.get_arrow()
         self._cl_arrow = arrow
         self._camera_line_pid_step()
@@ -500,13 +499,15 @@ class KBot:
         self._ty_lerr = e
 
     def _track_limit(self, value):
-        if abs(value) <= self._t_min:
+        # Scale theo max/ref: max=100 → 1.0x (giữ nguyên tune), max=300 → 3.0x, max=50 → 0.5x
+        scaled = value * self._t_max / self._t_ref
+        if abs(scaled) <= self._t_min:
             return 0
-        if value > self._t_max:
+        if scaled > self._t_max:
             return self._t_max
-        if value < -self._t_max:
+        if scaled < -self._t_max:
             return -self._t_max
-        return value
+        return scaled
 
     @property
     def track_vt(self):

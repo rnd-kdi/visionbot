@@ -48,12 +48,12 @@ class VisionBot:
         self._cl_noise_count = 0
         self._cl_stable_count = 0
         # Vision tracking PID state
-        self._tx_kp = 0.6
+        self._tx_kp = 0.3
         self._tx_ki = 0
-        self._tx_kd = 1.4
-        self._ty_kp = 1.6
+        self._tx_kd = 0.6
+        self._ty_kp = 1.0
         self._ty_ki = 0
-        self._ty_kd = 1.5
+        self._ty_kd = 2.0
         self._tx_lerr = 0
         self._tx_int = 0
         self._ty_lerr = 0
@@ -61,8 +61,8 @@ class VisionBot:
         self._tx_out = 0
         self._ty_out = 0
         self._t_min = 25
-        self._t_max = 150
-        self._t_dz = 5
+        self._t_max = 140
+        self._t_dz = 12
         self._t_imax = 50
         self._t_ref = 100  # output PID raw "danh nghĩa" — scale = _t_max / _t_ref
 

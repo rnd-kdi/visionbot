@@ -1037,8 +1037,7 @@ Blockly.Blocks['robotics_angle_sensor_init'] = {
             "type": "field_dropdown",
             "name": "type",
             "options": [
-              ["MPU6050", "MPU6050"],
-              ["MPU9250", "MPU9250"]
+              ["MPU6050", "MPU6050"]
             ]
           },
           {

@@ -1,6 +1,6 @@
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category id="visionbot" name="VISION BOT" colour="#143894" icon="robot">
-    <category id="visionbot-basic" name="ĐỘNG CƠ DC" colour="#ff7513" icon="rocket">
+    <category id="visionbot-basic" name="{{VISIONBOT_CAT_DC_MOTOR}}" colour="#ff7513" icon="rocket">
       <!-- <block type="visionbot_set_speed">
         <value name="speed">
           <shadow type="math_number">

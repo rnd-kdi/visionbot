@@ -2421,7 +2421,7 @@ Blockly.Blocks['visionbot_motor_run'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_motor_run",
-      message0: "Động cơ %1 quay tốc độ %2 %% đảo chiều %3",
+      message0: Blockly.Msg.VISIONBOT_MOTOR_RUN,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2444,14 +2444,14 @@ Blockly.Blocks['visionbot_motor_run'] = {
           type: "field_dropdown",
           name: "reverse",
           options: [
-            ["KHÔNG", "no"],
-            ["CÓ", "yes"]
+            [Blockly.Msg.VISIONBOT_OPTION_NO, "no"],
+            [Blockly.Msg.VISIONBOT_OPTION_YES, "yes"]
           ]
         }
       ],
       inputsInline: true,
       colour: VisionBotTestColor,
-      tooltip: "Quay động cơ với tốc độ chỉ định (0 để dừng)",
+      tooltip: Blockly.Msg.VISIONBOT_MOTOR_RUN_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2473,7 +2473,7 @@ Blockly.Blocks['visionbot_motor_run_for'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_motor_run_for",
-      message0: "Động cơ %1 quay tốc độ %2 %% trong %3 giây đảo chiều %4",
+      message0: Blockly.Msg.VISIONBOT_MOTOR_RUN_FOR,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2493,14 +2493,14 @@ Blockly.Blocks['visionbot_motor_run_for'] = {
           type: "field_dropdown",
           name: "reverse",
           options: [
-            ["KHÔNG", "no"],
-            ["CÓ", "yes"]
+            [Blockly.Msg.VISIONBOT_OPTION_NO, "no"],
+            [Blockly.Msg.VISIONBOT_OPTION_YES, "yes"]
           ]
         }
       ],
       inputsInline: true,
       colour: VisionBotTestColor,
-      tooltip: "Quay động cơ với tốc độ chỉ định trong N giây rồi dừng",
+      tooltip: Blockly.Msg.VISIONBOT_MOTOR_RUN_FOR_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2525,7 +2525,7 @@ Blockly.Blocks['visionbot_motor_stop'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_motor_stop",
-      message0: "Dừng động cơ %1",
+      message0: Blockly.Msg.VISIONBOT_MOTOR_STOP,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2542,7 +2542,7 @@ Blockly.Blocks['visionbot_motor_stop'] = {
       ],
       inputsInline: true,
       colour: VisionBotTestColor,
-      tooltip: "Dừng động cơ chỉ định",
+      tooltip: Blockly.Msg.VISIONBOT_MOTOR_STOP_TOOLTIP,
       helpUrl: ""
     });
   }

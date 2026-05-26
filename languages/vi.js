@@ -82,3 +82,14 @@ Blockly.Msg.ROBOTICS_ROBOT_TURN_UNTIL_LINE_DETECTED = "quay %1 đến vạch đe
 Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_LINE_BY_TIME = "dò line trong %1 giây rồi %2"
 Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_LINE_UNTIL = "dò line cho đến khi %1 rồi %2"
 
+// VisionBot — menu ĐỘNG CƠ DC
+Blockly.Msg.VISIONBOT_CAT_DC_MOTOR = "ĐỘNG CƠ DC";
+Blockly.Msg.VISIONBOT_OPTION_NO = "KHÔNG";
+Blockly.Msg.VISIONBOT_OPTION_YES = "CÓ";
+Blockly.Msg.VISIONBOT_MOTOR_RUN = "Động cơ %1 quay tốc độ %2 %% đảo chiều %3";
+Blockly.Msg.VISIONBOT_MOTOR_RUN_TOOLTIP = "Quay động cơ với tốc độ chỉ định (0 để dừng)";
+Blockly.Msg.VISIONBOT_MOTOR_RUN_FOR = "Động cơ %1 quay tốc độ %2 %% trong %3 giây đảo chiều %4";
+Blockly.Msg.VISIONBOT_MOTOR_RUN_FOR_TOOLTIP = "Quay động cơ với tốc độ chỉ định trong N giây rồi dừng";
+Blockly.Msg.VISIONBOT_MOTOR_STOP = "Dừng động cơ %1";
+Blockly.Msg.VISIONBOT_MOTOR_STOP_TOOLTIP = "Dừng động cơ chỉ định";
+

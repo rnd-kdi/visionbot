@@ -81,3 +81,14 @@ Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_END_LINE = "follow line to end then %1"
 Blockly.Msg.ROBOTICS_ROBOT_TURN_UNTIL_LINE_DETECTED = "turn %1 until line detected then %2"
 Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_LINE_BY_TIME = "follow line in %1 second(s) then %2"
 Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_LINE_UNTIL = "follow line until %1 then %2"
+
+// VisionBot — DC MOTOR menu
+Blockly.Msg.VISIONBOT_CAT_DC_MOTOR = "DC MOTOR";
+Blockly.Msg.VISIONBOT_OPTION_NO = "NO";
+Blockly.Msg.VISIONBOT_OPTION_YES = "YES";
+Blockly.Msg.VISIONBOT_MOTOR_RUN = "Motor %1 run speed %2 %% reversed %3";
+Blockly.Msg.VISIONBOT_MOTOR_RUN_TOOLTIP = "Run motor at given speed (0 to stop)";
+Blockly.Msg.VISIONBOT_MOTOR_RUN_FOR = "Motor %1 run speed %2 %% for %3 second(s) reversed %4";
+Blockly.Msg.VISIONBOT_MOTOR_RUN_FOR_TOOLTIP = "Run motor at given speed for N second(s) then stop";
+Blockly.Msg.VISIONBOT_MOTOR_STOP = "Stop motor %1";
+Blockly.Msg.VISIONBOT_MOTOR_STOP_TOOLTIP = "Stop the specified motor";

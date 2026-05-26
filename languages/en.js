@@ -84,6 +84,36 @@ Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_LINE_UNTIL = "follow line until %1 then %2"
 
 // VisionBot — DC MOTOR menu
 Blockly.Msg.VISIONBOT_CAT_DC_MOTOR = "DC MOTOR";
+
+// VisionBot — SERVO MOTOR menu
+Blockly.Msg.VISIONBOT_CAT_SERVO_MOTOR = "SERVO MOTOR";
+
+// VisionBot — ENCODER MOTOR menu
+Blockly.Msg.VISIONBOT_CAT_ENCODER_MOTOR = "ENCODER MOTOR";
+Blockly.Msg.VISIONBOT_LABEL_MOVING = "Moving";
+Blockly.Msg.VISIONBOT_LABEL_TURN_BY_ANGLE = "Turn by angle";
+Blockly.Msg.VISIONBOT_WHEEL_LEFT = "LEFT";
+Blockly.Msg.VISIONBOT_WHEEL_RIGHT = "RIGHT";
+Blockly.Msg.VISIONBOT_SIDE_BOTH = "both";
+Blockly.Msg.VISIONBOT_SIDE_LEFT = "left";
+Blockly.Msg.VISIONBOT_SIDE_RIGHT = "right";
+Blockly.Msg.VISIONBOT_MOTOR_INIT_FULL = "Init encoder motor %1 wheel %2 reversed %3 RPM %4 PPR %5 gear ratio %6";
+Blockly.Msg.VISIONBOT_MOTOR_INIT_FULL_TOOLTIP = "Init encoder motor and configure parameters in one step";
+Blockly.Msg.VISIONBOT_PID_UPDATE = "Set encoder motor speed PID Kp %1 Ki %2 Kd %3";
+Blockly.Msg.VISIONBOT_PID_UPDATE_TOOLTIP = "Set motor PID parameters (auto-runs on set_target_rpm)";
+Blockly.Msg.VISIONBOT_PID_STOP = "Stop motor %1";
+Blockly.Msg.VISIONBOT_PID_STOP_TOOLTIP = "Stop left, right, or both motors (resets PID state if both)";
+Blockly.Msg.VISIONBOT_PID_RESET = "Reset encoder motor speed PID";
+Blockly.Msg.VISIONBOT_PID_RESET_TOOLTIP = "Reset PID state (motor keeps running)";
+Blockly.Msg.VISIONBOT_SET_TARGET_RPM = "Run left wheel %1 right %2 RPM";
+Blockly.Msg.VISIONBOT_SET_TARGET_RPM_TOOLTIP = "Set target speed (RPM) for each wheel";
+Blockly.Msg.VISIONBOT_MOVE_RPM = "%1 speed %2 RPM for %3 second(s)";
+Blockly.Msg.VISIONBOT_MOVE_RPM_TOOLTIP = "Move in direction at given RPM for N second(s) then brake";
+Blockly.Msg.VISIONBOT_GYRO_INIT = "Init angle sensor, calib %1 samples";
+Blockly.Msg.VISIONBOT_GYRO_INIT_TOOLTIP = "Init MPU6050 angle sensor for VisionBot (robot must stay still during calib)";
+Blockly.Msg.VISIONBOT_TURN_DEGREE = "%1 speed %2 RPM angle %3 degree(s) then stop";
+Blockly.Msg.VISIONBOT_TURN_DEGREE_TOOLTIP = "VisionBot turn by angle at given RPM (needs angle sensor init first)";
+
 Blockly.Msg.VISIONBOT_OPTION_NO = "NO";
 Blockly.Msg.VISIONBOT_OPTION_YES = "YES";
 Blockly.Msg.VISIONBOT_MOTOR_RUN = "Motor %1 run speed %2 %% reversed %3";

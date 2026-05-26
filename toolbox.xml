@@ -63,7 +63,7 @@
       <block type="visionbot_motor_stop" />
     </category>
 
-    <category id="visionbot-servo" name="ĐỘNG CƠ SERVO" colour="#0090f5" icon="cog">
+    <category id="visionbot-servo" name="{{VISIONBOT_CAT_SERVO_MOTOR}}" colour="#0090f5" icon="cog">
       <block type="robotics_servo_init" />
       <block type="robotics_servo_limit">
         <value name="min">
@@ -105,8 +105,8 @@
       </block>
     </category>
 
-    <category id="visionbot-pid" name="ĐỘNG CƠ ENCODER" colour="#27ae60" icon="tachometer-alt">
-      <label text="Di chuyển" web-class="blockLabelStyle"></label>
+    <category id="visionbot-pid" name="{{VISIONBOT_CAT_ENCODER_MOTOR}}" colour="#27ae60" icon="tachometer-alt">
+      <label text="{{VISIONBOT_LABEL_MOVING}}" web-class="blockLabelStyle"></label>
       <block type="visionbot_motor_init_full">
         <value name="rpm">
           <shadow type="math_number">
@@ -169,7 +169,7 @@
       </block>
 
       <sep gap="30"></sep>
-      <label text="Xoay theo góc" web-class="blockLabelStyle"></label>
+      <label text="{{VISIONBOT_LABEL_TURN_BY_ANGLE}}" web-class="blockLabelStyle"></label>
       <block type="visionbot_gyro_init">
         <value name="samples">
           <shadow type="math_number">

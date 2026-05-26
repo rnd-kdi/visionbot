@@ -1552,7 +1552,7 @@ Blockly.Blocks['visionbot_motor_init_full'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_motor_init_full",
-      message0: "Khởi tạo động cơ encoder %1 bánh %2 đảo chiều %3 RPM %4 PPR %5 tỉ số truyền %6",
+      message0: Blockly.Msg.VISIONBOT_MOTOR_INIT_FULL,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1568,16 +1568,16 @@ Blockly.Blocks['visionbot_motor_init_full'] = {
           type: "field_dropdown",
           name: "side",
           options: [
-            ["TRÁI", "left"],
-            ["PHẢI", "right"]
+            [Blockly.Msg.VISIONBOT_WHEEL_LEFT, "left"],
+            [Blockly.Msg.VISIONBOT_WHEEL_RIGHT, "right"]
           ]
         },
         {
           type: "field_dropdown",
           name: "reverse",
           options: [
-            ["KHÔNG", "no"],
-            ["CÓ", "yes"]
+            [Blockly.Msg.VISIONBOT_OPTION_NO, "no"],
+            [Blockly.Msg.VISIONBOT_OPTION_YES, "yes"]
           ]
         },
         { type: "input_value", name: "rpm", check: "Number" },
@@ -1586,7 +1586,7 @@ Blockly.Blocks['visionbot_motor_init_full'] = {
       ],
       inputsInline: true,
       colour: VisionBotPIDColor,
-      tooltip: "Khởi tạo động cơ encoder và cài đặt thông số trong 1 bước",
+      tooltip: Blockly.Msg.VISIONBOT_MOTOR_INIT_FULL_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -1802,7 +1802,7 @@ Blockly.Blocks['visionbot_gyro_init'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_gyro_init",
-      message0: "Khởi tạo cảm biến góc, calib %1 mẫu",
+      message0: Blockly.Msg.VISIONBOT_GYRO_INIT,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1814,7 +1814,7 @@ Blockly.Blocks['visionbot_gyro_init'] = {
       ],
       inputsInline: true,
       colour: VisionBotGyroColor,
-      tooltip: "Khởi tạo cảm biến góc MPU6050 cho VisionBot (robot phải đứng yên khi calib)",
+      tooltip: Blockly.Msg.VISIONBOT_GYRO_INIT_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -1837,7 +1837,7 @@ Blockly.Blocks['visionbot_turn_degree'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_turn_degree",
-      message0: "%1 tốc độ %2 RPM góc %3 độ rồi dừng",
+      message0: Blockly.Msg.VISIONBOT_TURN_DEGREE,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1862,7 +1862,7 @@ Blockly.Blocks['visionbot_turn_degree'] = {
       ],
       inputsInline: true,
       colour: VisionBotGyroColor,
-      tooltip: "VisionBot xoay theo góc với tốc độ RPM (cần khởi tạo cảm biến góc trước)",
+      tooltip: Blockly.Msg.VISIONBOT_TURN_DEGREE_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -1916,7 +1916,7 @@ Blockly.Blocks['visionbot_set_target_rpm'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_set_target_rpm",
-      message0: "Quay bánh trái %1 phải %2 RPM",
+      message0: Blockly.Msg.VISIONBOT_SET_TARGET_RPM,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1933,7 +1933,7 @@ Blockly.Blocks['visionbot_set_target_rpm'] = {
       ],
       inputsInline: true,
       colour: VisionBotPIDColor,
-      tooltip: "Đặt tốc độ mong muốn (RPM) cho từng bánh",
+      tooltip: Blockly.Msg.VISIONBOT_SET_TARGET_RPM_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -1951,7 +1951,7 @@ Blockly.Blocks['visionbot_pid_update'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_pid_update",
-      message0: "Đặt PID tốc độ động cơ encoder Kp %1 Ki %2 Kd %3",
+      message0: Blockly.Msg.VISIONBOT_PID_UPDATE,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1973,7 +1973,7 @@ Blockly.Blocks['visionbot_pid_update'] = {
       ],
       inputsInline: true,
       colour: VisionBotPIDColor,
-      tooltip: "Cài đặt thông số PID cho motor (tự động chạy khi set_target_rpm)",
+      tooltip: Blockly.Msg.VISIONBOT_PID_UPDATE_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -1992,7 +1992,7 @@ Blockly.Blocks['visionbot_pid_stop'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_pid_stop",
-      message0: "Dừng động cơ %1",
+      message0: Blockly.Msg.VISIONBOT_PID_STOP,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2000,15 +2000,15 @@ Blockly.Blocks['visionbot_pid_stop'] = {
           type: "field_dropdown",
           name: "side",
           options: [
-            ["cả hai", "both"],
-            ["trái", "left"],
-            ["phải", "right"]
+            [Blockly.Msg.VISIONBOT_SIDE_BOTH, "both"],
+            [Blockly.Msg.VISIONBOT_SIDE_LEFT, "left"],
+            [Blockly.Msg.VISIONBOT_SIDE_RIGHT, "right"]
           ]
         }
       ],
       inputsInline: true,
       colour: VisionBotPIDColor,
-      tooltip: "Dừng động cơ trái, phải hoặc cả hai (reset PID state nếu dừng cả hai)",
+      tooltip: Blockly.Msg.VISIONBOT_PID_STOP_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2029,13 +2029,13 @@ Blockly.Blocks['visionbot_pid_reset'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_pid_reset",
-      message0: "Reset PID tốc độ động cơ encoder",
+      message0: Blockly.Msg.VISIONBOT_PID_RESET,
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
       colour: VisionBotPIDColor,
-      tooltip: "Reset PID state (không dừng motor)",
+      tooltip: Blockly.Msg.VISIONBOT_PID_RESET_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2051,7 +2051,7 @@ Blockly.Blocks['visionbot_move_rpm'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_move_rpm",
-      message0: "%1 tốc độ %2 RPM trong %3 giây",
+      message0: Blockly.Msg.VISIONBOT_MOVE_RPM,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2078,7 +2078,7 @@ Blockly.Blocks['visionbot_move_rpm'] = {
       ],
       inputsInline: true,
       colour: VisionBotPIDColor,
-      tooltip: "Di chuyển theo hướng với tốc độ RPM trong N giây rồi phanh",
+      tooltip: Blockly.Msg.VISIONBOT_MOVE_RPM_TOOLTIP,
       helpUrl: ""
     });
   }

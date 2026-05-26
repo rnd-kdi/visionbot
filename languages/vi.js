@@ -84,6 +84,36 @@ Blockly.Msg.ROBOTICS_ROBOT_FOLLOW_LINE_UNTIL = "dò line cho đến khi %1 rồi
 
 // VisionBot — menu ĐỘNG CƠ DC
 Blockly.Msg.VISIONBOT_CAT_DC_MOTOR = "ĐỘNG CƠ DC";
+
+// VisionBot — menu ĐỘNG CƠ SERVO
+Blockly.Msg.VISIONBOT_CAT_SERVO_MOTOR = "ĐỘNG CƠ SERVO";
+
+// VisionBot — menu ĐỘNG CƠ ENCODER
+Blockly.Msg.VISIONBOT_CAT_ENCODER_MOTOR = "ĐỘNG CƠ ENCODER";
+Blockly.Msg.VISIONBOT_LABEL_MOVING = "Di chuyển";
+Blockly.Msg.VISIONBOT_LABEL_TURN_BY_ANGLE = "Xoay theo góc";
+Blockly.Msg.VISIONBOT_WHEEL_LEFT = "TRÁI";
+Blockly.Msg.VISIONBOT_WHEEL_RIGHT = "PHẢI";
+Blockly.Msg.VISIONBOT_SIDE_BOTH = "cả hai";
+Blockly.Msg.VISIONBOT_SIDE_LEFT = "trái";
+Blockly.Msg.VISIONBOT_SIDE_RIGHT = "phải";
+Blockly.Msg.VISIONBOT_MOTOR_INIT_FULL = "Khởi tạo động cơ encoder %1 bánh %2 đảo chiều %3 RPM %4 PPR %5 tỉ số truyền %6";
+Blockly.Msg.VISIONBOT_MOTOR_INIT_FULL_TOOLTIP = "Khởi tạo động cơ encoder và cài đặt thông số trong 1 bước";
+Blockly.Msg.VISIONBOT_PID_UPDATE = "Đặt PID tốc độ động cơ encoder Kp %1 Ki %2 Kd %3";
+Blockly.Msg.VISIONBOT_PID_UPDATE_TOOLTIP = "Cài đặt thông số PID cho motor (tự động chạy khi set_target_rpm)";
+Blockly.Msg.VISIONBOT_PID_STOP = "Dừng động cơ %1";
+Blockly.Msg.VISIONBOT_PID_STOP_TOOLTIP = "Dừng động cơ trái, phải hoặc cả hai (reset PID state nếu dừng cả hai)";
+Blockly.Msg.VISIONBOT_PID_RESET = "Reset PID tốc độ động cơ encoder";
+Blockly.Msg.VISIONBOT_PID_RESET_TOOLTIP = "Reset PID state (không dừng motor)";
+Blockly.Msg.VISIONBOT_SET_TARGET_RPM = "Quay bánh trái %1 phải %2 RPM";
+Blockly.Msg.VISIONBOT_SET_TARGET_RPM_TOOLTIP = "Đặt tốc độ mong muốn (RPM) cho từng bánh";
+Blockly.Msg.VISIONBOT_MOVE_RPM = "%1 tốc độ %2 RPM trong %3 giây";
+Blockly.Msg.VISIONBOT_MOVE_RPM_TOOLTIP = "Di chuyển theo hướng với tốc độ RPM trong N giây rồi phanh";
+Blockly.Msg.VISIONBOT_GYRO_INIT = "Khởi tạo cảm biến góc, calib %1 mẫu";
+Blockly.Msg.VISIONBOT_GYRO_INIT_TOOLTIP = "Khởi tạo cảm biến góc MPU6050 cho VisionBot (robot phải đứng yên khi calib)";
+Blockly.Msg.VISIONBOT_TURN_DEGREE = "%1 tốc độ %2 RPM góc %3 độ rồi dừng";
+Blockly.Msg.VISIONBOT_TURN_DEGREE_TOOLTIP = "VisionBot xoay theo góc với tốc độ RPM (cần khởi tạo cảm biến góc trước)";
+
 Blockly.Msg.VISIONBOT_OPTION_NO = "KHÔNG";
 Blockly.Msg.VISIONBOT_OPTION_YES = "CÓ";
 Blockly.Msg.VISIONBOT_MOTOR_RUN = "Động cơ %1 quay tốc độ %2 %% đảo chiều %3";

@@ -192,7 +192,7 @@
     </category>
 
     <category id="visionbot-advanced" name="CAMERA" colour="#3d2403" icon="camera">
-      <label text="Đọc camera" web-class="blockLabelStyle"></label>
+      <label text="{{VISIONBOT_LABEL_CAMERA_READ}}" web-class="blockLabelStyle"></label>
       <block type="huskylens_i2c_init" />
       <block type="huskylens_update_block" />
       <block type="huskylens_bounding_box" />
@@ -202,7 +202,7 @@
       <block type="huskylens_classification_is_id" />
 
       <sep gap="30"></sep>
-      <label text="Theo dõi đối tượng" web-class="blockLabelStyle"></label>
+      <label text="{{VISIONBOT_LABEL_OBJECT_TRACKING}}" web-class="blockLabelStyle"></label>
       <block type="visionbot_track_update">
         <value name="target">
           <shadow type="math_number">
@@ -267,7 +267,7 @@
       <block type="visionbot_track_stop" />
 
       <sep gap="30"></sep>
-      <label text="Dò line Camera" web-class="blockLabelStyle"></label>
+      <label text="{{VISIONBOT_LABEL_CAMERA_LINE}}" web-class="blockLabelStyle"></label>
       <block type="visionbot_camera_line_speed_set">
         <value name="min_speed">
           <shadow type="math_number">
@@ -313,14 +313,14 @@
       <block type="robotics_get_battery" />
 
       <sep gap="30"></sep>
-      <label text="LINE SENSOR A chân I2C" web-class="blockLabelStyle"></label>
+      <label text="{{VISIONBOT_LABEL_LINE_SENSOR_A}}" web-class="blockLabelStyle"></label>
       <block type="visionbot_line_sensor_init" />
       <block type="visionbot_line_sensor_update" />
       <block type="visionbot_line_sensor_read_all" />
       <block type="visionbot_line_sensor_read" />
 
       <sep gap="30"></sep>
-      <label text="LINE SENSOR B chân D" web-class="blockLabelStyle"></label>
+      <label text="{{VISIONBOT_LABEL_LINE_SENSOR_B}}" web-class="blockLabelStyle"></label>
       <block type="visionbot_line_sensor_b_init" />
       <block type="visionbot_line_sensor_b_update" />
       <block type="visionbot_line_sensor_b_read_all" />

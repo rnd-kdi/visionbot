@@ -1323,12 +1323,12 @@ Blockly.Blocks['huskylens_i2c_init'] = {
   init: function () {
     this.jsonInit({
       type: "huskylens_i2c_init",
-      message0: "Khởi tạo Camera chân I2C",
+      message0: Blockly.Msg.HUSKYLENS_I2C_INIT,
       previousStatement: null,
       nextStatement: null,
       args0: [],
       colour: HuskyLensColorBlock,
-      tooltip: "Khởi tạo kết nối HuskyLens qua I2C (địa chỉ 0x32)",
+      tooltip: Blockly.Msg.HUSKYLENS_I2C_INIT_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -1346,8 +1346,8 @@ Blockly.Blocks["huskylens_update_block"] = {
     this.jsonInit({
       type: "huskylens_update_block",
       colour: HuskyLensColorBlock,
-      tooltip: "Cập nhật dữ liệu vật thể từ HuskyLens (gọi 1 lần mỗi vòng lặp)",
-      message0: "Cập nhật %1 của ID %2",
+      tooltip: Blockly.Msg.HUSKYLENS_UPDATE_BLOCK_TOOLTIP,
+      message0: Blockly.Msg.HUSKYLENS_UPDATE_BLOCK,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -1390,18 +1390,18 @@ Blockly.Blocks["huskylens_bounding_box"] = {
   init: function () {
     this.jsonInit({
       colour: HuskyLensColorBlock,
-      tooltip: "Đọc thông số khung bao vật thể theo ID (cần đặt khối Cập nhật trước)",
-      message0: "Đọc %1 của vật thể ID %2",
+      tooltip: Blockly.Msg.HUSKYLENS_BOUNDING_BOX_TOOLTIP,
+      message0: Blockly.Msg.HUSKYLENS_BOUNDING_BOX,
       output: "Number",
       args0: [
         {
           type: "field_dropdown",
           name: "DATA_TYPE",
           options: [
-            ["x trung tâm", "x"],
-            ["y trung tâm", "y"],
-            ["chiều rộng", "w"],
-            ["chiều cao", "h"]
+            [Blockly.Msg.HUSKYLENS_BBOX_X_CENTER, "x"],
+            [Blockly.Msg.HUSKYLENS_BBOX_Y_CENTER, "y"],
+            [Blockly.Msg.HUSKYLENS_BBOX_WIDTH, "w"],
+            [Blockly.Msg.HUSKYLENS_BBOX_HEIGHT, "h"]
           ]
         },
         {
@@ -1429,8 +1429,8 @@ Blockly.Blocks["huskylens_update_arrow"] = {
     this.jsonInit({
       type: "huskylens_update_arrow",
       colour: HuskyLensColorBlock,
-      tooltip: "Cập nhật dữ liệu đường line từ HuskyLens (gọi 1 lần mỗi vòng lặp)",
-      message0: "Cập nhật đường line",
+      tooltip: Blockly.Msg.HUSKYLENS_UPDATE_ARROW_TOOLTIP,
+      message0: Blockly.Msg.HUSKYLENS_UPDATE_ARROW,
       previousStatement: null,
       nextStatement: null,
       args0: [],
@@ -1450,18 +1450,18 @@ Blockly.Blocks["huskylens_line_tracking"] = {
   init: function () {
     this.jsonInit({
       colour: HuskyLensColorBlock,
-      tooltip: "Đọc tọa độ điểm đầu hoặc đuôi đường line (cần đặt khối Cập nhật trước)",
-      message0: "Đọc tọa độ %1 đường line",
+      tooltip: Blockly.Msg.HUSKYLENS_LINE_TRACKING_TOOLTIP,
+      message0: Blockly.Msg.HUSKYLENS_LINE_TRACKING,
       output: "Number",
       args0: [
         {
           type: "field_dropdown",
           name: "POINT_TYPE",
           options: [
-            ["x đuôi", "xo"],
-            ["y đuôi", "yo"],
-            ["x đầu", "xt"],
-            ["y đầu", "yt"]
+            [Blockly.Msg.HUSKYLENS_LINE_X_TAIL, "xo"],
+            [Blockly.Msg.HUSKYLENS_LINE_Y_TAIL, "yo"],
+            [Blockly.Msg.HUSKYLENS_LINE_X_HEAD, "xt"],
+            [Blockly.Msg.HUSKYLENS_LINE_Y_HEAD, "yt"]
           ]
         }
       ],
@@ -1482,8 +1482,8 @@ Blockly.Blocks["huskylens_update_classification"] = {
     this.jsonInit({
       type: "huskylens_update_classification",
       colour: HuskyLensColorBlock,
-      tooltip: "Cập nhật Object Classification từ HuskyLens (gọi 1 lần mỗi vòng lặp)",
-      message0: "Cập nhật Object Classification",
+      tooltip: Blockly.Msg.HUSKYLENS_UPDATE_CLASSIFICATION_TOOLTIP,
+      message0: Blockly.Msg.HUSKYLENS_UPDATE_CLASSIFICATION,
       previousStatement: null,
       nextStatement: null,
       args0: [],
@@ -1509,8 +1509,8 @@ Blockly.Blocks["huskylens_classification_is_id"] = {
     this.jsonInit({
       type: "huskylens_classification_is_id",
       colour: HuskyLensColorBlock,
-      tooltip: "Kiểm tra xem Object Classification có phát hiện ID này không",
-      message0: "Phát hiện ID %1 ?",
+      tooltip: Blockly.Msg.HUSKYLENS_CLASSIFICATION_IS_ID_TOOLTIP,
+      message0: Blockly.Msg.HUSKYLENS_CLASSIFICATION_IS_ID,
       output: "Boolean",
       args0: [
         {
@@ -2151,7 +2151,7 @@ Blockly.Blocks['visionbot_track_set_pid_x'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_set_pid_x",
-      message0: "Đặt PID theo hướng X (ngang) Kp %1 Ki %2 Kd %3",
+      message0: Blockly.Msg.VISIONBOT_TRACK_SET_PID_X,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2161,7 +2161,7 @@ Blockly.Blocks['visionbot_track_set_pid_x'] = {
       ],
       inputsInline: true,
       colour: VisionBotTrackColor,
-      tooltip: "Cài đặt thông số PID cho trục X (ngang)",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_SET_PID_X_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2179,7 +2179,7 @@ Blockly.Blocks['visionbot_track_set_pid_y'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_set_pid_y",
-      message0: "Đặt PID theo hướng Y (dọc) Kp %1 Ki %2 Kd %3",
+      message0: Blockly.Msg.VISIONBOT_TRACK_SET_PID_Y,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2189,7 +2189,7 @@ Blockly.Blocks['visionbot_track_set_pid_y'] = {
       ],
       inputsInline: true,
       colour: VisionBotTrackColor,
-      tooltip: "Cài đặt thông số PID cho trục Y (dọc)",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_SET_PID_Y_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2207,7 +2207,7 @@ Blockly.Blocks['visionbot_track_set_speed'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_set_speed",
-      message0: "Đặt tốc độ bám min %1 max %2",
+      message0: Blockly.Msg.VISIONBOT_TRACK_SET_SPEED,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2216,7 +2216,7 @@ Blockly.Blocks['visionbot_track_set_speed'] = {
       ],
       inputsInline: true,
       colour: VisionBotTrackColor,
-      tooltip: "Cài đặt tốc độ tối thiểu và tối đa cho tracking",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_SET_SPEED_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2233,7 +2233,7 @@ Blockly.Blocks['visionbot_track_update'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_update",
-      message0: "Đặt mục tiêu ID %1 hướng %2 toạ độ %3",
+      message0: Blockly.Msg.VISIONBOT_TRACK_UPDATE,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2245,13 +2245,13 @@ Blockly.Blocks['visionbot_track_update'] = {
         {
           type: "field_dropdown",
           name: "AXIS",
-          options: [["X (ngang)", "x"], ["Y (dọc)", "y"]]
+          options: [[Blockly.Msg.VISIONBOT_AXIS_X, "x"], [Blockly.Msg.VISIONBOT_AXIS_Y, "y"]]
         },
         { type: "input_value", name: "target", check: "Number" }
       ],
       inputsInline: true,
       colour: VisionBotTrackColor,
-      tooltip: "Đặt mục tiêu theo dõi đối tượng theo trục X (ngang) hoặc Y (dọc) từ dữ liệu camera",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_UPDATE_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2314,11 +2314,11 @@ Blockly.Blocks['visionbot_track_follow'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_follow",
-      message0: "Bám theo đối tượng",
+      message0: Blockly.Msg.VISIONBOT_TRACK_FOLLOW,
       previousStatement: null,
       nextStatement: null,
       colour: VisionBotTrackColor,
-      tooltip: "Thực hiện 1 chu kỳ bám đối tượng. Đặt khối này trong vòng lặp.",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_FOLLOW_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2352,7 +2352,7 @@ Blockly.Blocks['visionbot_track_follow_for'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_follow_for",
-      message0: "Bám theo đối tượng trong %1 giây rồi dừng",
+      message0: Blockly.Msg.VISIONBOT_TRACK_FOLLOW_FOR,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2360,7 +2360,7 @@ Blockly.Blocks['visionbot_track_follow_for'] = {
       ],
       inputsInline: true,
       colour: VisionBotTrackColor,
-      tooltip: "Bám đối tượng trong N giây rồi phanh gấp",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_FOLLOW_FOR_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2402,11 +2402,11 @@ Blockly.Blocks['visionbot_track_stop'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_track_stop",
-      message0: "Dừng bám theo đối tượng",
+      message0: Blockly.Msg.VISIONBOT_TRACK_STOP,
       previousStatement: null,
       nextStatement: null,
       colour: VisionBotTrackColor,
-      tooltip: "Dừng động cơ ngay lập tức",
+      tooltip: Blockly.Msg.VISIONBOT_TRACK_STOP_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2586,7 +2586,7 @@ Blockly.Blocks['visionbot_gamepad_init'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_gamepad_init",
-      message0: "Bật chế độ gamepad với độ nhạy %1",
+      message0: Blockly.Msg.VISIONBOT_GAMEPAD_INIT,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2599,7 +2599,7 @@ Blockly.Blocks['visionbot_gamepad_init'] = {
       ],
       colour: VisionBotGamepadColor,
       inputsInline: true,
-      tooltip: "Khởi tạo gamepad và bật điều khiển từ xa",
+      tooltip: Blockly.Msg.VISIONBOT_GAMEPAD_INIT_TOOLTIP,
       helpUrl: ""
     });
   },
@@ -2622,8 +2622,8 @@ Blockly.Blocks['visionbot_gamepad_on_button'] = {
   init: function () {
     this.jsonInit({
       colour: VisionBotGamepadColor,
-      message0: "Khi nhấn nút %1 %2 %3",
-      tooltip: "Thực hiện hành động khi nhấn nút trên gamepad",
+      message0: Blockly.Msg.VISIONBOT_GAMEPAD_ON_BUTTON,
+      tooltip: Blockly.Msg.VISIONBOT_GAMEPAD_ON_BUTTON_TOOLTIP,
       args0: [
         {
           type: "field_dropdown",
@@ -2752,8 +2752,8 @@ Blockly.Blocks['visionbot_gamepad_read_button'] = {
   init: function () {
     this.jsonInit({
       colour: VisionBotGamepadColor,
-      tooltip: "Đọc trạng thái nút gamepad",
-      message0: "Nút %1 được nhấn?",
+      tooltip: Blockly.Msg.VISIONBOT_GAMEPAD_READ_BUTTON_TOOLTIP,
+      message0: Blockly.Msg.VISIONBOT_GAMEPAD_READ_BUTTON,
       args0: [
         {
           type: "field_dropdown",
@@ -2855,15 +2855,15 @@ Blockly.Blocks['visionbot_gamepad_read_joystick'] = {
   init: function () {
     this.jsonInit({
       colour: VisionBotGamepadColor,
-      tooltip: "Đọc giá trị joystick",
-      message0: "Joystick %1 giá trị %2",
+      tooltip: Blockly.Msg.VISIONBOT_GAMEPAD_READ_JOYSTICK_TOOLTIP,
+      message0: Blockly.Msg.VISIONBOT_GAMEPAD_READ_JOYSTICK,
       args0: [
         {
           type: "field_dropdown",
           name: "joystick",
           options: [
-            ["Trái", "AL"],
-            ["Phải", "AR"]
+            [Blockly.Msg.VISIONBOT_JOYSTICK_LEFT, "AL"],
+            [Blockly.Msg.VISIONBOT_JOYSTICK_RIGHT, "AR"]
           ]
         },
         {
@@ -2872,8 +2872,8 @@ Blockly.Blocks['visionbot_gamepad_read_joystick'] = {
           options: [
             ["X", "X"],
             ["Y", "Y"],
-            ["Hướng", "_DIR"],
-            ["Khoảng cách", "_DISTANCE"]
+            [Blockly.Msg.VISIONBOT_JOYSTICK_DIRECTION, "_DIR"],
+            [Blockly.Msg.VISIONBOT_JOYSTICK_DISTANCE, "_DISTANCE"]
           ]
         }
       ],
@@ -2895,7 +2895,7 @@ Blockly.Blocks['visionbot_gamepad_pause'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_gamepad_pause",
-      message0: "Gamepad %1",
+      message0: Blockly.Msg.VISIONBOT_GAMEPAD_PAUSE,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -2903,14 +2903,14 @@ Blockly.Blocks['visionbot_gamepad_pause'] = {
           type: "field_dropdown",
           name: "action",
           options: [
-            ["tạm dừng", "True"],
-            ["tiếp tục", "False"],
+            [Blockly.Msg.VISIONBOT_GAMEPAD_PAUSE_ACTION, "True"],
+            [Blockly.Msg.VISIONBOT_GAMEPAD_RESUME_ACTION, "False"],
           ],
         },
       ],
       colour: VisionBotGamepadColor,
       inputsInline: true,
-      tooltip: "Tạm dừng hoặc tiếp tục điều khiển gamepad",
+      tooltip: Blockly.Msg.VISIONBOT_GAMEPAD_PAUSE_TOOLTIP,
       helpUrl: ""
     });
   },
@@ -2929,13 +2929,13 @@ Blockly.Blocks['visionbot_line_sensor_init'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_init",
-      message0: "Khởi tạo cảm biến dò line A chân I2C",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_INIT,
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       colour: VisionBotLineColorA,
-      tooltip: "Khởi tạo cảm biến dò line A (gắn vào cổng I2C cố định)",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_INIT_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2952,13 +2952,13 @@ Blockly.Blocks['visionbot_line_sensor_update'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_update",
-      message0: "Cập nhật cảm biến dò line A",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_UPDATE,
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       colour: VisionBotLineColorA,
-      tooltip: "Đọc và lưu trạng thái 4 mắt cảm biến A (dùng trước khi đọc giá trị)",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_UPDATE_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -2977,7 +2977,7 @@ Blockly.Blocks['visionbot_line_sensor_read_all'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_read_all",
-      message0: "Đọc cảm biến dò line A %1 %2 %3 %4",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_READ_ALL,
       args0: [
         {
           type: "field_dropdown",
@@ -3078,7 +3078,7 @@ Blockly.Blocks['visionbot_line_sensor_read_all'] = {
       ],
       colour: VisionBotLineColorA,
       output: "Boolean",
-      tooltip: "Kiểm tra trạng thái 4 cảm biến dò line",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_READ_ALL_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3101,7 +3101,7 @@ Blockly.Blocks['visionbot_line_sensor_read'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_read",
-      message0: "Đọc cảm biến dò line %1",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_READ,
       args0: [
         {
           type: "field_dropdown",
@@ -3116,7 +3116,7 @@ Blockly.Blocks['visionbot_line_sensor_read'] = {
       ],
       colour: VisionBotLineColorA,
       output: "Boolean",
-      tooltip: "Đọc giá trị một cảm biến dò line",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_READ_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3136,7 +3136,7 @@ Blockly.Blocks['visionbot_line_sensor_b_init'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_b_init",
-      message0: "Khởi tạo cảm biến dò line B chân SCL %1 SDA %2",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_INIT,
       args0: [
         {
           type: "field_dropdown",
@@ -3161,7 +3161,7 @@ Blockly.Blocks['visionbot_line_sensor_b_init'] = {
       previousStatement: null,
       nextStatement: null,
       colour: VisionBotLineColorB,
-      tooltip: "Khởi tạo cảm biến dò line B (cảm biến thứ 2, gắn vào GPIO)",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_INIT_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3182,13 +3182,13 @@ Blockly.Blocks['visionbot_line_sensor_b_update'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_b_update",
-      message0: "Cập nhật cảm biến dò line B",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_UPDATE,
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       colour: VisionBotLineColorB,
-      tooltip: "Đọc và lưu trạng thái 4 mắt cảm biến B (dùng trước khi đọc giá trị)",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_UPDATE_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3218,7 +3218,7 @@ Blockly.Blocks['visionbot_line_sensor_b_read_all'] = {
     };
     this.jsonInit({
       type: "visionbot_line_sensor_b_read_all",
-      message0: "Đọc cảm biến dò line B %1 %2 %3 %4",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_READ_ALL,
       args0: [
         { type: "field_dropdown", name: "S1", options: dropdownOptions() },
         { type: "field_dropdown", name: "S2", options: dropdownOptions() },
@@ -3227,7 +3227,7 @@ Blockly.Blocks['visionbot_line_sensor_b_read_all'] = {
       ],
       colour: VisionBotLineColorB,
       output: "Boolean",
-      tooltip: "Kiểm tra trạng thái 4 cảm biến dò line B",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_READ_ALL_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3248,7 +3248,7 @@ Blockly.Blocks['visionbot_line_sensor_b_read'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_line_sensor_b_read",
-      message0: "Đọc cảm biến dò line %1",
+      message0: Blockly.Msg.VISIONBOT_LINE_SENSOR_READ,
       args0: [
         {
           type: "field_dropdown",
@@ -3263,7 +3263,7 @@ Blockly.Blocks['visionbot_line_sensor_b_read'] = {
       ],
       colour: VisionBotLineColorB,
       output: "Boolean",
-      tooltip: "Đọc giá trị một cảm biến dò line B",
+      tooltip: Blockly.Msg.VISIONBOT_LINE_SENSOR_B_READ_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3297,7 +3297,7 @@ Blockly.Blocks['visionbot_camera_line_speed_set'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_camera_line_speed_set",
-      message0: "Đặt tốc độ dò line min %1 max %2 RPM",
+      message0: Blockly.Msg.VISIONBOT_CAMERA_LINE_SPEED_SET,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -3306,7 +3306,7 @@ Blockly.Blocks['visionbot_camera_line_speed_set'] = {
       ],
       inputsInline: true,
       colour: VisionBotCameraLineColor,
-      tooltip: "Đặt tốc độ tối thiểu (khi cua) và tối đa (khi thẳng) cho dò line camera",
+      tooltip: Blockly.Msg.VISIONBOT_CAMERA_LINE_SPEED_SET_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3324,7 +3324,7 @@ Blockly.Blocks['visionbot_camera_line_pid_set'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_camera_line_pid_set",
-      message0: "Đặt PID dò line Kp %1 Ki %2 Kd %3",
+      message0: Blockly.Msg.VISIONBOT_CAMERA_LINE_PID_SET,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -3334,7 +3334,7 @@ Blockly.Blocks['visionbot_camera_line_pid_set'] = {
       ],
       inputsInline: true,
       colour: VisionBotCameraLineColor,
-      tooltip: "Cài đặt PID cho dò line bằng camera HuskyLens (target X mặc định = tâm màn hình 160)",
+      tooltip: Blockly.Msg.VISIONBOT_CAMERA_LINE_PID_SET_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3353,7 +3353,7 @@ Blockly.Blocks['visionbot_follow_line_camera_by_time'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_follow_line_camera_by_time",
-      message0: "Dò line camera trong %1 giây rồi dừng",
+      message0: Blockly.Msg.VISIONBOT_FOLLOW_LINE_CAMERA_BY_TIME,
       previousStatement: null,
       nextStatement: null,
       args0: [
@@ -3361,7 +3361,7 @@ Blockly.Blocks['visionbot_follow_line_camera_by_time'] = {
       ],
       inputsInline: true,
       colour: VisionBotCameraLineColor,
-      tooltip: "Dò line bằng camera HuskyLens trong N giây rồi phanh gấp",
+      tooltip: Blockly.Msg.VISIONBOT_FOLLOW_LINE_CAMERA_BY_TIME_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3385,13 +3385,13 @@ Blockly.Blocks['visionbot_follow_line_camera'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_follow_line_camera",
-      message0: "Dò line camera",
+      message0: Blockly.Msg.VISIONBOT_FOLLOW_LINE_CAMERA,
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
       colour: VisionBotCameraLineColor,
-      tooltip: "Dò line bằng camera HuskyLens liên tục (dùng khối Dừng dò line camera để dừng)",
+      tooltip: Blockly.Msg.VISIONBOT_FOLLOW_LINE_CAMERA_TOOLTIP,
       helpUrl: ""
     });
   }
@@ -3410,13 +3410,13 @@ Blockly.Blocks['visionbot_follow_line_camera_stop'] = {
   init: function () {
     this.jsonInit({
       type: "visionbot_follow_line_camera_stop",
-      message0: "Dừng dò line camera",
+      message0: Blockly.Msg.VISIONBOT_FOLLOW_LINE_CAMERA_STOP,
       previousStatement: null,
       nextStatement: null,
       args0: [],
       inputsInline: true,
       colour: VisionBotCameraLineColor,
-      tooltip: "Dừng dò line bằng camera",
+      tooltip: Blockly.Msg.VISIONBOT_FOLLOW_LINE_CAMERA_STOP_TOOLTIP,
       helpUrl: ""
     });
   }

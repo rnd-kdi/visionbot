@@ -341,10 +341,14 @@ class VisionBot:
                 speed = min(speed + accel_steps, self._speed)
                 turn_speed = min(turn_speed + int(accel_steps / 2), self._speed)
 
-            if self._teleop_cmd in self._teleop_cmd_handlers:
+            if self._teleop_cmd != '' and self._teleop_cmd in self._teleop_cmd_handlers:
                 if self._teleop_cmd_handlers[self._teleop_cmd] is not None:
                     await self._teleop_cmd_handlers[self._teleop_cmd]()
                     await asyncio.sleep_ms(200)
+            elif self._teleop_cmd != '':
+                # Nút đang nhấn nhưng không có handler → không can thiệp,
+                # để code user (polling kiểu if/else) tự xử lý.
+                pass
             else:
                 if dir == DIR_FW:
                     self.run_speed(speed, speed)
@@ -363,6 +367,11 @@ class VisionBot:
                 elif dir == DIR_LB:
                     self.run_speed(int(-speed / 2), -speed)
                 else:
+                    # Không nhấn gì → reset PID target để PID tự brake,
+                    # đồng thời stop motor.
+                    if self._pid_running:
+                        self._target_left = 0
+                        self._target_right = 0
                     self.stop()
 
             last_dir = dir

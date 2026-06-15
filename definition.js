@@ -1532,7 +1532,7 @@ Blockly.Python['huskylens_classification_is_id'] = function (block) {
   Blockly.Python.definitions_['huskylens_classification_var'] = '_husky_cls_id = 0';
   var id = block.getFieldValue('ID');
   var code = '_husky_cls_id == ' + id;
-  return [code, Blockly.Python.ORDER_RELATIONAL];
+  return [code, Blockly.Python.ORDER_NONE];
 };
 
 // VisionBot Robot blocks ---------------------------------------------------------------------------------------
